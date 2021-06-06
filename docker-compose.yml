@@ -1,0 +1,66 @@
+version: "3.9"
+
+services:
+  wemod-api:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: wemod-api
+    command: python3 manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+    #    ports:
+    #      - 8000:8000
+    env_file:
+      - .env
+    restart: "on-failure"
+    depends_on:
+      - wemod-db
+    networks:
+      - wemod-api
+
+  wemod-db:
+    image: kartoza/postgis:13.0
+    container_name: wemod-db
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres_data:/var/lib/postgresql
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASS=${POSTGRES_PASS}
+      - POSTGRES_DB=${POSTGRES_DB}
+    restart: "on-failure"
+    networks:
+      - wemod-api
+#  client:
+#    build:
+#      context: ./client
+#      dockerfile: Dockerfile.dev
+#    container_name: wemod_frontend
+#    volumes:
+#      - ./app/node_modules
+#      - ./client:/app
+#    depends_on:
+#      - wemod-api
+#    networks:
+#      - wemod-api
+
+  nginx:
+    restart: always
+    depends_on:
+      - wemod-api
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile.dev
+    ports:
+      - 8080:80
+    networks:
+      - wemod-api
+
+networks:
+  wemod-api:
+    driver: bridge
+
+volumes:
+  postgres_data:

@@ -1,0 +1,1565 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta
+            name="viewport"
+            content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width"
+    />
+    <meta name="mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+
+    <link
+            rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+            integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+            crossorigin="anonymous"
+    />
+
+    <link rel="stylesheet" href="/static/css/leaflet.css"/>
+    <link rel="stylesheet" href="/static/css/qgis2web.css"/>
+    <link rel="stylesheet" href="/static/css/fontawesome-all.min.css"/>
+    <link rel="stylesheet" href="/static/css/MarkerCluster.css"/>
+    <link rel="stylesheet" href="/static/css/MarkerCluster.Default.css"/>
+    <link rel="stylesheet" href="/static/css/leaflet-control-geocoder.Geocoder.css"/>
+    <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/leaflet-draw@1.0.4/dist/leaflet.draw.css"
+    />
+    <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.css"
+    />
+
+    <style>
+        html,
+        body,
+        #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+
+        .area-tooltip {
+            background: #363636;
+            background: rgba(0, 0, 0, 0.5);
+            border: none;
+            color: #f8d5e4;
+        }
+    </style>
+
+    <title>WildEast Map of Dreams</title>
+    <script
+            src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.2/dist/alpine.min.js"
+            defer
+    ></script>
+    <script
+            src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"
+    ></script>
+    <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"
+    ></script>
+    <script
+            src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+</head>
+<body>
+<div id="map"></div>
+
+<!-- Modal Box for new shapes-->
+<div class="modal" tabindex="-1" role="dialog" id="newShape">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">New Pledge</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="newShapeForm">
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label for="notes">Your Name</label>
+                            <input type="text" class="form-control form-control-sm" id="firstName"
+                                   placeholder="First Name"/>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="notes">Surname</label>
+                            <input type="text" class="form-control form-control-sm" id="lastName"
+                                   placeholder="Last Name"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="notes">Email</label>
+                        <input type="text" class="form-control form-control-sm" id="email" placeholder="Email"/>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label for="notes">Phone</label>
+                            <input type="text" class="form-control form-control-sm" id="phone" placeholder="Phone"/>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="postcode">Your Postcode</label>
+                            <input type="text" class="form-control form-control-sm" id="postcode"
+                                   placeholder="Postcode"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label for="street">Your street name</label>
+                            <input type="text" class="form-control form-control-sm" id="street"></input>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="city">Your town/village/city</label>
+                            <input type="text" class="form-control form-control-sm" id="city"></input>
+                        </div>
+                    </div>
+                    <div id="areaFields">
+                        <div class="form-group">
+                            <label for="area">How much land are you pledging?</label>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <input type="number" class="form-control form-control-sm" id="area" value="10"
+                                           name="area"/>
+                                </div>
+                                <div class="col-md-6">
+                                    <select class="form-control form-control-sm" id="measurementUnit">
+                                        <option value="m2">m<sup>2</sup></option>
+                                        <option value="acres">Acres</option>
+                                        <option selected="selected" value="ha">Hectares</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="notes">In your words, why are you pledging to The WildEast?</label>
+                        <textarea class="form-control form-control-sm" id="notes"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-save btn-primary">Make Pledge</button>
+                <button type="button" class="btn btn-cancel btn-secondary" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/static/js/qgis2web_expressions.js"></script>
+<script src="/static/js/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/leaflet-draw@1.0.4/dist/leaflet.draw.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.js"></script>
+<script src="/static/js/leaflet.rotatedMarker.js"></script>
+<script src="/static/js/leaflet.pattern.js"></script>
+<script src="/static/js/leaflet-hash.js"></script>
+<script src="/static/js/Autolinker.min.js"></script>
+<script src="/static/js/rbush.min.js"></script>
+<script src="/static/js/labelgun.min.js"></script>
+<script src="/static/js/labels.js"></script>
+<script src="/static/js/leaflet-control-geocoder.Geocoder.js"></script>
+<script src="/static/js/leaflet.markercluster.js"></script>
+<script src="/static/data/Schools_3.js"></script>
+<script src="/static/data/SchoolPledges_4.js"></script>
+<script src="/static/data/Churches_5.js"></script>
+<script src="/static/data/ChurchPledge_6.js"></script>
+<script src="/static/data/Farms_7.js"></script>
+<script src="/static/data/FarmPledges_8.js"></script>
+<script src="/static/data/Government_9.js"></script>
+<script src="/static/data/GovernmentPledges_10.js"></script>
+<script src="/static/data/GardenPledges_11.js"></script>
+
+<script>
+    var map = L.map("map", {
+        zoomControl: true,
+        maxZoom: 28,
+        minZoom: 1,
+    }).fitBounds([
+        [51.23908874836559, -0.7748474896206704],
+        [53.14254326217286, 2.162353031732282],
+    ]);
+
+    var hash = new L.Hash(map);
+
+    map.attributionControl.setPrefix(
+        'Powered by <a href="https://www.globalmapaid.org" target="_blank">GlobalMapAid</a> &middot; Maps by <a href="http://www.africabees.com" title="interactive maps produced by AfricaBees">Justin Saunders</a> &middot; <a href="https://qgis.org">OpenSource</a>'
+    );
+
+    var autolinker = new Autolinker({
+        truncate: {length: 30, location: "smart"},
+    });
+
+    var bounds_group = new L.featureGroup([]);
+
+    function setBounds() {
+    }
+
+    map.createPane("pane_Satellitebackground_0");
+    //map.getPane("pane_Satellitebackground_0").style.zIndex = 200;
+    var layer_Satellitebackground_0 = L.tileLayer(
+        "https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}",
+        {
+            pane: "pane_Satellitebackground_0",
+            opacity: 0.8,
+            attribution: "",
+            minZoom: 1,
+            maxZoom: 28,
+            minNativeZoom: 0,
+            maxNativeZoom: 18,
+        }
+    ).addTo(map);
+    //layer_Satellitebackground_0;
+    //map.addLayer(layer_Satellitebackground_0);
+
+    map.createPane("pane_Backgroundmap_2");
+    //map.getPane("pane_Backgroundmap_2").style.zIndex = 201;
+    var layer_Backgroundmap_2 = L.tileLayer(
+        "https://maps.googleapis.com/maps/vt?pb=!1m5!1m4!1i{z}!2i{x}!3i{y}!4i256!2m3!1e0!2sm!3i512225992!3m17!2sen!3sUS!5e18!12m4!1e68!2m2!1sset!2sRoadmap!12m3!1e37!2m1!1ssmartmaps!12m4!1e26!2m2!1sstyles!2zcy50OjV8cC5oOiNGRkJCMDB8cC5zOjQzLjQwMDAwMDAwMDAwMDAwNnxwLmw6MzcuNTk5OTk5OTk5OTk5OTk0fHAuZzoxLHMudDo0OXxwLmg6I0ZGQzIwMHxwLnM6LTYxLjh8cC5sOjQ1LjU5OTk5OTk5OTk5OTk5NHxwLmc6MSxzLnQ6NTB8cC5oOiNGRjAzMDB8cC5zOi0xMDB8cC5sOjUxLjE5OTk5OTk5OTk5OTk5fHAuZzoxLHMudDo1MXxwLmg6I0ZGMDMwMHxwLnM6LTEwMHxwLmw6NTJ8cC5nOjEscy50OjZ8cC5oOiMwMDc4RkZ8cC5zOi0xMy4yMDAwMDAwMDAwMDAwMDN8cC5sOjIuNDAwMDAwMDAwMDAwMDA1N3xwLmc6MSxzLnQ6MnxwLmg6IzAwRkY2QXxwLnM6LTEuMDk4OTAxMDk4OTAxMTIzNHxwLmw6MTEuMjAwMDAwMDAwMDAwMDE3fHAuZzox!4e0&key=AIzaSyAOqYYyBbtXQEtcHG7hwAwyCPQSYidG8yU&token=14219",
+        {
+            pane: "pane_Backgroundmap_2",
+            opacity: 0.5,
+            attribution: "",
+            minZoom: 1,
+            maxZoom: 28,
+            minNativeZoom: 0,
+            maxNativeZoom: 18,
+        }
+    );
+
+    layer_Backgroundmap_2;
+    map.addLayer(layer_Backgroundmap_2);
+
+    map.createPane("pane_WildEastbackground_1");
+    //map.getPane("pane_WildEastbackground_1").style.zIndex = 202;
+    var img_WildEastbackground_1 = "/static/data/WildEastbackground_1.png";
+    var img_bounds_WildEastbackground_1 = [
+        [51.178016618442186, -0.5091631799223866],
+        [53.649163239541785, 1.803079068638552],
+    ];
+    var layer_WildEastbackground_1 = new L.imageOverlay(
+        img_WildEastbackground_1,
+        img_bounds_WildEastbackground_1,
+        {
+            pane: "pane_WildEastbackground_1",
+            opacity: 0.2,
+        }
+    );
+    bounds_group.addLayer(layer_WildEastbackground_1);
+    map.addLayer(layer_WildEastbackground_1);
+
+    function pop_Schools_3(feature, layer) {
+        var popupContent =
+            '<table>\
+                      <tr>\
+                          <th scope="row">Name</th>\
+                          <td>' +
+            (feature.properties["name"] !== null
+                ? autolinker.link(feature.properties["name"].toLocaleString())
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Pledge link</th>\
+                          <td>' +
+            (feature.properties["Pledge link"] !== null
+                ? autolinker.link(
+                    feature.properties["Pledge link"].toLocaleString()
+                )
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Notes</th>\
+                          <td>' +
+            (feature.properties["Notes"] !== null
+                ? autolinker.link(feature.properties["Notes"].toLocaleString())
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Acres</th>\
+                          <td>' +
+            (feature.properties["Acres"] !== null
+                ? autolinker.link(feature.properties["Acres"].toLocaleString())
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Hectares</th>\
+                          <td>' +
+            (feature.properties["Hectares"] !== null
+                ? autolinker.link(feature.properties["Hectares"].toLocaleString())
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Photo</th>\
+                          <td>' +
+            (feature.properties["Photo_link"] !== null
+                ? autolinker.link(feature.properties["Photo_link"].toLocaleString())
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Video</th>\
+                          <td>' +
+            (feature.properties["Video_link"] !== null
+                ? autolinker.link(feature.properties["Video_link"].toLocaleString())
+                : "") +
+            "</td>\
+                      </tr>\
+                  </table>";
+        layer.bindPopup(popupContent, {maxHeight: 400});
+    }
+
+    function style_Schools_3_0() {
+        return {
+            pane: "pane_Schools_3",
+            rotationAngle: 0.0,
+            rotationOrigin: "center center",
+            icon: L.icon({
+                iconUrl: "/static/markers/paw-orange.svg",
+                iconSize: [20, 20],
+            }),
+            interactive: true,
+        };
+    }
+
+    map.createPane("pane_Schools_3");
+    map.getPane("pane_Schools_3").style.zIndex = 403;
+    map.getPane("pane_Schools_3").style["mix-blend-mode"] = "normal";
+    var layer_Schools_3 = new L.geoJson(json_Schools_3, {
+        attribution: "",
+        interactive: true,
+        dataVar: "json_Schools_3",
+        layerName: "layer_Schools_3",
+        pane: "pane_Schools_3",
+        onEachFeature: pop_Schools_3,
+        pointToLayer: function (feature, latlng) {
+            var context = {
+                feature: feature,
+                variables: {},
+            };
+            return L.marker(latlng, style_Schools_3_0(feature));
+        },
+    });
+    var cluster_Schools_3 = new L.MarkerClusterGroup({
+        showCoverageOnHover: false,
+        spiderfyDistanceMultiplier: 2,
+    });
+    cluster_Schools_3.addLayer(layer_Schools_3);
+
+    bounds_group.addLayer(layer_Schools_3);
+
+    function pop_SchoolPledges_4(feature, layer) {
+        var popupContent =
+            '<table>\
+                      <tr>\
+                          <th scope="row">Name</th>\
+                          <td>' +
+            (feature.properties["name"] !== null
+                ? autolinker.link(feature.properties["name"].toLocaleString())
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Pledgelink</th>\
+                          <td>' +
+            (feature.properties["Pledge link"] !== null
+                ? autolinker.link(
+                    feature.properties["Pledge link"].toLocaleString()
+                )
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Notes</th>\
+                          <td>' +
+            (feature.properties["Notes"] !== null
+                ? autolinker.link(feature.properties["Notes"].toLocaleString())
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Acres</th>\
+                          <td>' +
+            (feature.properties["Acres"] !== null
+                ? autolinker.link(feature.properties["Acres"].toLocaleString())
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Hectares</th>\
+                          <td>' +
+            (feature.properties["Hectares"] !== null
+                ? autolinker.link(feature.properties["Hectares"].toLocaleString())
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Photo</th>\
+                          <td>' +
+            (feature.properties["Photo_link"] !== null
+                ? autolinker.link(feature.properties["Photo_link"].toLocaleString())
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Video</th>\
+                          <td>' +
+            (feature.properties["Video_link"] !== null
+                ? autolinker.link(feature.properties["Video_link"].toLocaleString())
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Reason for Pledging</th>\
+                          <td>' +
+            (feature.properties["Reason_for_wilding"] !== null
+                ? autolinker.link(
+                    feature.properties["Reason_for_wilding"].toLocaleString()
+                )
+                : "") +
+            "</td>\
+                      </tr>\
+                  </table>";
+        layer.bindPopup(popupContent, {maxHeight: 400});
+    }
+
+    function style_SchoolPledges_4_0() {
+        return {
+            pane: "pane_SchoolPledges_4",
+            rotationAngle: 0.0,
+            rotationOrigin: "center center",
+            icon: L.icon({
+                iconUrl: "/static/markers/paw_green.svg",
+                iconSize: [20, 20],
+            }),
+            interactive: true,
+        };
+    }
+
+    map.createPane("pane_SchoolPledges_4");
+    map.getPane("pane_SchoolPledges_4").style.zIndex = 404;
+    map.getPane("pane_SchoolPledges_4").style["mix-blend-mode"] = "normal";
+    var layer_SchoolPledges_4 = new L.geoJson(json_SchoolPledges_4, {
+        attribution: "",
+        interactive: true,
+        dataVar: "json_SchoolPledges_4",
+        layerName: "layer_SchoolPledges_4",
+        pane: "pane_SchoolPledges_4",
+        onEachFeature: pop_SchoolPledges_4,
+        pointToLayer: function (feature, latlng) {
+            var context = {
+                feature: feature,
+                variables: {},
+            };
+            return L.marker(latlng, style_SchoolPledges_4_0(feature));
+        },
+    });
+    bounds_group.addLayer(layer_SchoolPledges_4);
+    map.addLayer(layer_SchoolPledges_4);
+
+    function pop_Churches_5(feature, layer) {
+        var popupContent =
+            '<table>\
+                      <tr>\
+                          <th scope="row">Name</th>\
+                          <td>' +
+            (feature.properties["name"] !== null
+                ? autolinker.link(feature.properties["name"].toLocaleString())
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Description</th>\
+                          <td>' +
+            (feature.properties["Description"] !== null
+                ? autolinker.link(
+                    feature.properties["Description"].toLocaleString()
+                )
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Notes</th>\
+                          <td>' +
+            (feature.properties["Notes"] !== null
+                ? autolinker.link(feature.properties["Notes"].toLocaleString())
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Acres</th>\
+                          <td>' +
+            (feature.properties["Acres"] !== null
+                ? autolinker.link(feature.properties["Acres"].toLocaleString())
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Hectares</th>\
+                          <td>' +
+            (feature.properties["Hectares"] !== null
+                ? autolinker.link(feature.properties["Hectares"].toLocaleString())
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Photo</th>\
+                          <td>' +
+            (feature.properties["Photo_link"] !== null
+                ? autolinker.link(feature.properties["Photo_link"].toLocaleString())
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Video</th>\
+                          <td>' +
+            (feature.properties["Video_link"] !== null
+                ? autolinker.link(feature.properties["Video_link"].toLocaleString())
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Pledge link</th>\
+                          <td>' +
+            (feature.properties["Pledge_link"] !== null
+                ? autolinker.link(
+                    feature.properties["Pledge_link"].toLocaleString()
+                )
+                : "") +
+            "</td>\
+                      </tr>\
+                  </table>";
+        layer.bindPopup(popupContent, {maxHeight: 400});
+    }
+
+    function style_Churches_5_0() {
+        return {
+            pane: "pane_Churches_5",
+            rotationAngle: 0.0,
+            rotationOrigin: "center center",
+            icon: L.icon({
+                iconUrl: "/static/markers/church_orange.svg",
+                iconSize: [20, 20],
+            }),
+            interactive: true,
+        };
+    }
+
+    map.createPane("pane_Churches_5");
+    map.getPane("pane_Churches_5").style.zIndex = 405;
+    map.getPane("pane_Churches_5").style["mix-blend-mode"] = "normal";
+    var layer_Churches_5 = new L.geoJson(json_Churches_5, {
+        attribution: "",
+        interactive: true,
+        dataVar: "json_Churches_5",
+        layerName: "layer_Churches_5",
+        pane: "pane_Churches_5",
+        onEachFeature: pop_Churches_5,
+        pointToLayer: function (feature, latlng) {
+            var context = {
+                feature: feature,
+                variables: {},
+            };
+            return L.marker(latlng, style_Churches_5_0(feature));
+        },
+    });
+    var cluster_Churches_5 = new L.MarkerClusterGroup({
+        showCoverageOnHover: false,
+        spiderfyDistanceMultiplier: 2,
+    });
+    cluster_Churches_5.addLayer(layer_Churches_5);
+
+    bounds_group.addLayer(layer_Churches_5);
+
+    function pop_ChurchPledge_6(feature, layer) {
+        var popupContent =
+            '<table>\
+                      <tr>\
+                          <th scope="row">Name</th>\
+                          <td>' +
+            (feature.properties["name"] !== null
+                ? autolinker.link(feature.properties["name"].toLocaleString())
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Description</th>\
+                          <td>' +
+            (feature.properties["Description"] !== null
+                ? autolinker.link(
+                    feature.properties["Description"].toLocaleString()
+                )
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Notes</th>\
+                          <td>' +
+            (feature.properties["Notes"] !== null
+                ? autolinker.link(feature.properties["Notes"].toLocaleString())
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Acres</th>\
+                          <td>' +
+            (feature.properties["Acres"] !== null
+                ? autolinker.link(feature.properties["Acres"].toLocaleString())
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Hectares</th>\
+                          <td>' +
+            (feature.properties["Hectares"] !== null
+                ? autolinker.link(feature.properties["Hectares"].toLocaleString())
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Photo</th>\
+                          <td>' +
+            (feature.properties["Photo_link"] !== null
+                ? autolinker.link(feature.properties["Photo_link"].toLocaleString())
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Video</th>\
+                          <td>' +
+            (feature.properties["Video_link"] !== null
+                ? autolinker.link(feature.properties["Video_link"].toLocaleString())
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Reason for Pledging</th>\
+                          <td>' +
+            (feature.properties["Reason_for_wilding"] !== null
+                ? autolinker.link(
+                    feature.properties["Reason_for_wilding"].toLocaleString()
+                )
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Pledge link</th>\
+                          <td>' +
+            (feature.properties["Pledge_link"] !== null
+                ? autolinker.link(
+                    feature.properties["Pledge_link"].toLocaleString()
+                )
+                : "") +
+            "</td>\
+                      </tr>\
+                  </table>";
+        layer.bindPopup(popupContent, {maxHeight: 400});
+    }
+
+    function style_ChurchPledge_6_0() {
+        return {
+            pane: "pane_ChurchPledge_6",
+            rotationAngle: 0.0,
+            rotationOrigin: "center center",
+            icon: L.icon({
+                iconUrl: "/static/markers/church_green.svg",
+                iconSize: [20, 20],
+            }),
+            interactive: true,
+        };
+    }
+
+    map.createPane("pane_ChurchPledge_6");
+    map.getPane("pane_ChurchPledge_6").style.zIndex = 406;
+    map.getPane("pane_ChurchPledge_6").style["mix-blend-mode"] = "normal";
+    var layer_ChurchPledge_6 = new L.geoJson(json_ChurchPledge_6, {
+        attribution: "",
+        interactive: true,
+        dataVar: "json_ChurchPledge_6",
+        layerName: "layer_ChurchPledge_6",
+        pane: "pane_ChurchPledge_6",
+        onEachFeature: pop_ChurchPledge_6,
+        pointToLayer: function (feature, latlng) {
+            var context = {
+                feature: feature,
+                variables: {},
+            };
+            return L.marker(latlng, style_ChurchPledge_6_0(feature));
+        },
+    });
+    bounds_group.addLayer(layer_ChurchPledge_6);
+    map.addLayer(layer_ChurchPledge_6);
+
+    function pop_Farms_7(feature, layer) {
+        var popupContent =
+            '<table>\
+                      <tr>\
+                          <th scope="row">Name</th>\
+                          <td>' +
+            (feature.properties["TEXTSTRING"] !== null
+                ? autolinker.link(feature.properties["TEXTSTRING"].toLocaleString())
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Pledge link</th>\
+                          <td>' +
+            (feature.properties["Pledge link"] !== null
+                ? autolinker.link(
+                    feature.properties["Pledge link"].toLocaleString()
+                )
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Description</th>\
+                          <td>' +
+            (feature.properties["Description"] !== null
+                ? autolinker.link(
+                    feature.properties["Description"].toLocaleString()
+                )
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Notes</th>\
+                          <td>' +
+            (feature.properties["Notes"] !== null
+                ? autolinker.link(feature.properties["Notes"].toLocaleString())
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Acres</th>\
+                          <td>' +
+            (feature.properties["Acreas"] !== null
+                ? autolinker.link(feature.properties["Acreas"].toLocaleString())
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Hectares</th>\
+                          <td>' +
+            (feature.properties["Hectares"] !== null
+                ? autolinker.link(feature.properties["Hectares"].toLocaleString())
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Photo</th>\
+                          <td>' +
+            (feature.properties["Photo_link"] !== null
+                ? autolinker.link(feature.properties["Photo_link"].toLocaleString())
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Video</th>\
+                          <td>' +
+            (feature.properties["Video_link"] !== null
+                ? autolinker.link(feature.properties["Video_link"].toLocaleString())
+                : "") +
+            "</td>\
+                      </tr>\
+                  </table>";
+        layer.bindPopup(popupContent, {maxHeight: 400});
+    }
+
+    function style_Farms_7_0() {
+        return {
+            pane: "pane_Farms_7",
+            rotationAngle: 0.0,
+            rotationOrigin: "center center",
+            icon: L.icon({
+                iconUrl: "/static/markers/tractor-svgrepo-com (3).svg",
+                iconSize: [25, 25],
+            }),
+            interactive: true,
+        };
+    }
+
+    map.createPane("pane_Farms_7");
+    map.getPane("pane_Farms_7").style.zIndex = 407;
+    map.getPane("pane_Farms_7").style["mix-blend-mode"] = "normal";
+    var layer_Farms_7 = new L.geoJson(json_Farms_7, {
+        attribution: "",
+        interactive: true,
+        dataVar: "json_Farms_7",
+        layerName: "layer_Farms_7",
+        pane: "pane_Farms_7",
+        onEachFeature: pop_Farms_7,
+        pointToLayer: function (feature, latlng) {
+            var context = {
+                feature: feature,
+                variables: {},
+            };
+            return L.marker(latlng, style_Farms_7_0(feature));
+        },
+    });
+    var cluster_Farms_7 = new L.MarkerClusterGroup({
+        showCoverageOnHover: false,
+        spiderfyDistanceMultiplier: 2,
+    });
+    cluster_Farms_7.addLayer(layer_Farms_7);
+
+    bounds_group.addLayer(layer_Farms_7);
+
+    function pop_FarmPledges_8(feature, layer) {
+        var popupContent =
+            '<table>\
+                      <tr>\
+                          <th scope="row">Name</th>\
+                          <td>' +
+            (feature.properties["First"] !== null
+                ? autolinker.link(feature.properties["First"].toLocaleString())
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Notes</th>\
+                          <td>' +
+            (feature.properties["Notes "] !== null
+                ? autolinker.link(feature.properties["Notes "].toLocaleString())
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Acres</th>\
+                          <td>' +
+            (feature.properties["Acres"] !== null
+                ? autolinker.link(feature.properties["Acres"].toLocaleString())
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Photo or Video link</th>\
+                          <td>' +
+            (feature.properties["Photos_Videos "] !== null
+                ? autolinker.link(
+                    feature.properties["Photos_Videos "].toLocaleString()
+                )
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Postcode</th>\
+                          <td>' +
+            (feature.properties["Postcode"] !== null
+                ? autolinker.link(feature.properties["Postcode"].toLocaleString())
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Category</th>\
+                          <td>' +
+            (feature.properties["Description"] !== null
+                ? autolinker.link(
+                    feature.properties["Description"].toLocaleString()
+                )
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Link to datasheet</th>\
+                          <td>' +
+            (feature.properties["Data_sheet"] !== null
+                ? autolinker.link(feature.properties["Data_sheet"].toLocaleString())
+                : "") +
+            "</td>\
+                      </tr>\
+                  </table>";
+        layer.bindPopup(popupContent, {maxHeight: 400});
+    }
+
+    function style_FarmPledges_8_0() {
+        return {
+            pane: "pane_FarmPledges_8",
+            rotationAngle: 0.0,
+            rotationOrigin: "center center",
+            icon: L.icon({
+                iconUrl: "/static/markers/tractor-green.svg",
+                iconSize: [25, 25],
+            }),
+            interactive: true,
+        };
+    }
+
+    map.createPane("pane_FarmPledges_8");
+    map.getPane("pane_FarmPledges_8").style.zIndex = 408;
+    map.getPane("pane_FarmPledges_8").style["mix-blend-mode"] = "normal";
+    var layer_FarmPledges_8 = new L.geoJson(json_FarmPledges_8, {
+        attribution: "",
+        interactive: true,
+        dataVar: "json_FarmPledges_8",
+        layerName: "layer_FarmPledges_8",
+        pane: "pane_FarmPledges_8",
+        onEachFeature: pop_FarmPledges_8,
+        pointToLayer: function (feature, latlng) {
+            var context = {
+                feature: feature,
+                variables: {},
+            };
+            return L.marker(latlng, style_FarmPledges_8_0(feature));
+        },
+    });
+    bounds_group.addLayer(layer_FarmPledges_8);
+    map.addLayer(layer_FarmPledges_8);
+
+    function pop_Government_9(feature, layer) {
+        var popupContent =
+            '<table>\
+                      <tr>\
+                          <th scope="row">Photo</th>\
+                          <td>' +
+            (feature.properties["Photo_link"] !== null
+                ? autolinker.link(feature.properties["Photo_link"].toLocaleString())
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Video</th>\
+                          <td>' +
+            (feature.properties["Video_link"] !== null
+                ? autolinker.link(feature.properties["Video_link"].toLocaleString())
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Pledgelink</th>\
+                          <td>' +
+            (feature.properties["Pledge_link"] !== null
+                ? autolinker.link(
+                    feature.properties["Pledge_link"].toLocaleString()
+                )
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Description</th>\
+                          <td>' +
+            (feature.properties["Description"] !== null
+                ? autolinker.link(
+                    feature.properties["Description"].toLocaleString()
+                )
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Name</th>\
+                          <td>' +
+            (feature.properties["name"] !== null
+                ? autolinker.link(feature.properties["name"].toLocaleString())
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Notes</th>\
+                          <td>' +
+            (feature.properties["Notes"] !== null
+                ? autolinker.link(feature.properties["Notes"].toLocaleString())
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Acres</th>\
+                          <td>' +
+            (feature.properties["Acres"] !== null
+                ? autolinker.link(feature.properties["Acres"].toLocaleString())
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Hectares</th>\
+                          <td>' +
+            (feature.properties["Hectares"] !== null
+                ? autolinker.link(feature.properties["Hectares"].toLocaleString())
+                : "") +
+            "</td>\
+                      </tr>\
+                  </table>";
+        layer.bindPopup(popupContent, {maxHeight: 400});
+    }
+
+    function style_Government_9_0() {
+        return {
+            pane: "pane_Government_9",
+            rotationAngle: 0.0,
+            rotationOrigin: "center center",
+            icon: L.icon({
+                iconUrl: "/static/markers/crown-orange2.svg",
+                iconSize: [23, 13],
+            }),
+            interactive: true,
+        };
+    }
+
+    map.createPane("pane_Government_9");
+    map.getPane("pane_Government_9").style.zIndex = 409;
+    map.getPane("pane_Government_9").style["mix-blend-mode"] = "normal";
+    var layer_Government_9 = new L.geoJson(json_Government_9, {
+        attribution: "",
+        interactive: true,
+        dataVar: "json_Government_9",
+        layerName: "layer_Government_9",
+        pane: "pane_Government_9",
+        onEachFeature: pop_Government_9,
+        pointToLayer: function (feature, latlng) {
+            var context = {
+                feature: feature,
+                variables: {},
+            };
+            return L.marker(latlng, style_Government_9_0(feature));
+        },
+    });
+    var cluster_Government_9 = new L.MarkerClusterGroup({
+        showCoverageOnHover: false,
+        spiderfyDistanceMultiplier: 2,
+    });
+    cluster_Government_9.addLayer(layer_Government_9);
+
+    bounds_group.addLayer(layer_Government_9);
+
+    function pop_GovernmentPledges_10(feature, layer) {
+        var popupContent =
+            '<table>\
+                      <tr>\
+                          <th scope="row">Description</th>\
+                          <td>' +
+            (feature.properties["RNRSiteNo"] !== null
+                ? autolinker.link(feature.properties["RNRSiteNo"].toLocaleString())
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Reason for Pledging</th>\
+                          <td>' +
+            (feature.properties["ReasonForP"] !== null
+                ? autolinker.link(feature.properties["ReasonForP"].toLocaleString())
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Notes</th>\
+                          <td>' +
+            (feature.properties["Criteria"] !== null
+                ? autolinker.link(feature.properties["Criteria"].toLocaleString())
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Acres</th>\
+                          <td>' +
+            (feature.properties["Area acres"] !== null
+                ? autolinker.link(feature.properties["Area acres"].toLocaleString())
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Hectares</th>\
+                          <td>' +
+            (feature.properties["Area hectares"] !== null
+                ? autolinker.link(
+                    feature.properties["Area hectares"].toLocaleString()
+                )
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Photo</th>\
+                          <td>' +
+            (feature.properties["Photo_link"] !== null
+                ? autolinker.link(feature.properties["Photo_link"].toLocaleString())
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Video</th>\
+                          <td>' +
+            (feature.properties["Video_link"] !== null
+                ? autolinker.link(feature.properties["Video_link"].toLocaleString())
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Pledge link</th>\
+                          <td>' +
+            (feature.properties["Pledge_link"] !== null
+                ? autolinker.link(
+                    feature.properties["Pledge_link"].toLocaleString()
+                )
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Description</th>\
+                          <td>' +
+            (feature.properties["Description"] !== null
+                ? autolinker.link(
+                    feature.properties["Description"].toLocaleString()
+                )
+                : "") +
+            "</td>\
+                      </tr>\
+                  </table>";
+        layer.bindPopup(popupContent, {maxHeight: 400});
+    }
+
+    function style_GovernmentPledges_10_0() {
+        return {
+            pane: "pane_GovernmentPledges_10",
+            rotationAngle: 0.0,
+            rotationOrigin: "center center",
+            icon: L.icon({
+                iconUrl: "/static/markers/crown-green.svg",
+                iconSize: [23, 13],
+            }),
+            interactive: true,
+        };
+    }
+
+    map.createPane("pane_GovernmentPledges_10");
+    map.getPane("pane_GovernmentPledges_10").style.zIndex = 410;
+    map.getPane("pane_GovernmentPledges_10").style["mix-blend-mode"] =
+        "normal";
+    var layer_GovernmentPledges_10 = new L.geoJson(
+        json_GovernmentPledges_10,
+        {
+            attribution: "",
+            interactive: true,
+            dataVar: "json_GovernmentPledges_10",
+            layerName: "layer_GovernmentPledges_10",
+            pane: "pane_GovernmentPledges_10",
+            onEachFeature: pop_GovernmentPledges_10,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {},
+                };
+                return L.marker(latlng, style_GovernmentPledges_10_0(feature));
+            },
+        }
+    );
+    bounds_group.addLayer(layer_GovernmentPledges_10);
+    map.addLayer(layer_GovernmentPledges_10);
+
+    function pop_GardenPledges_11(feature, layer) {
+        var popupContent =
+            '<table>\
+                      <tr>\
+                          <th scope="row">fid</th>\
+                          <td>' +
+            (feature.properties["fid"] !== null
+                ? autolinker.link(feature.properties["fid"].toLocaleString())
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Pledge date</th>\
+                          <td>' +
+            (feature.properties["Date"] !== null
+                ? autolinker.link(feature.properties["Date"].toLocaleString())
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Description</th>\
+                          <td>' +
+            (feature.properties["Type"] !== null
+                ? autolinker.link(feature.properties["Type"].toLocaleString())
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Name</th>\
+                          <td>' +
+            (feature.properties["Firstname"] !== null
+                ? autolinker.link(feature.properties["Firstname"].toLocaleString())
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Postcode</th>\
+                          <td>' +
+            (feature.properties["Postcode"] !== null
+                ? autolinker.link(feature.properties["Postcode"].toLocaleString())
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Notes</th>\
+                          <td>' +
+            (feature.properties["Notes"] !== null
+                ? autolinker.link(feature.properties["Notes"].toLocaleString())
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Acres</th>\
+                          <td>' +
+            (feature.properties["Acres"] !== null
+                ? autolinker.link(feature.properties["Acres"].toLocaleString())
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Hectares</th>\
+                          <td>' +
+            (feature.properties["Hectares"] !== null
+                ? autolinker.link(feature.properties["Hectares"].toLocaleString())
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Sq metres</th>\
+                          <td>' +
+            (feature.properties["m2"] !== null
+                ? autolinker.link(feature.properties["m2"].toLocaleString())
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Photo link</th>\
+                          <td>' +
+            (feature.properties["Photo_link"] !== null
+                ? autolinker.link(feature.properties["Photo_link"].toLocaleString())
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Video link</th>\
+                          <td>' +
+            (feature.properties["Video_link"] !== null
+                ? autolinker.link(feature.properties["Video_link"].toLocaleString())
+                : "") +
+            '</td>\
+                      </tr>\
+                      <tr>\
+                          <th scope="row">Pledged</th>\
+                          <td>' +
+            (feature.properties["Pledged"] !== null
+                ? autolinker.link(feature.properties["Pledged"].toLocaleString())
+                : "") +
+            "</td>\
+                      </tr>\
+                  </table>";
+        layer.bindPopup(popupContent, {maxHeight: 400});
+    }
+
+    function style_GardenPledges_11_0() {
+        return {
+            pane: "pane_GardenPledges_11",
+            rotationAngle: 0.0,
+            rotationOrigin: "center center",
+            icon: L.icon({
+                iconUrl: "/static/markers/WE_green.svg",
+                iconSize: [17, 25],
+            }),
+            interactive: true,
+        };
+    }
+
+    map.createPane("pane_GardenPledges_11");
+    map.getPane("pane_GardenPledges_11").style.zIndex = 411;
+    map.getPane("pane_GardenPledges_11").style["mix-blend-mode"] = "normal";
+    var layer_GardenPledges_11 = new L.geoJson(json_GardenPledges_11, {
+        attribution: "",
+        interactive: true,
+        dataVar: "json_GardenPledges_11",
+        layerName: "layer_GardenPledges_11",
+        pane: "pane_GardenPledges_11",
+        onEachFeature: pop_GardenPledges_11,
+        pointToLayer: function (feature, latlng) {
+            var context = {
+                feature: feature,
+                variables: {},
+            };
+            return L.marker(latlng, style_GardenPledges_11_0(feature));
+        },
+    });
+    bounds_group.addLayer(layer_GardenPledges_11);
+    map.addLayer(layer_GardenPledges_11);
+    var title = new L.Control();
+    title.onAdd = function (map) {
+        this._div = L.DomUtil.create("div", "info");
+        this.update();
+        return this._div;
+    };
+    title.update = function () {
+        this._div.innerHTML = "<h2>WildEast Map of Dreams</h2>";
+    };
+    title.addTo(map);
+    var osmGeocoder = new L.Control.Geocoder({
+        collapsed: true,
+        position: "topleft",
+        text: "Search",
+        title: "Testing",
+    }).addTo(map);
+    document.getElementsByClassName(
+        "leaflet-control-geocoder-icon"
+    )[0].className += " fa fa-search";
+    document.getElementsByClassName(
+        "leaflet-control-geocoder-icon"
+    )[0].title += "Search for a place";
+    var baseMaps = {};
+    L.control
+        .layers(baseMaps, {
+            '<img src="/static/legend/GardenPledges_11.png" /> Garden Pledges':
+            layer_GardenPledges_11,
+            '<img src="/static/legend/GovernmentPledges_10.png" /> Government Pledges':
+            layer_GovernmentPledges_10,
+            '<img src="/static/legend/Government_9.png" /> Government':
+            cluster_Government_9,
+            '<img src="/static/legend/FarmPledges_8.png" /> Farm Pledges':
+            layer_FarmPledges_8,
+            '<img src="/static/legend/Farms_7.png" /> Farms': cluster_Farms_7,
+            '<img src="/static/legend/ChurchPledge_6.png" /> Church Pledge':
+            layer_ChurchPledge_6,
+            '<img src="/static/legend/Churches_5.png" /> Churches': cluster_Churches_5,
+            '<img src="/static/legend/SchoolPledges_4.png" /> School Pledges':
+            layer_SchoolPledges_4,
+            '<img src="/static/legend/Schools_3.png" /> Schools': cluster_Schools_3,
+            "Background map": layer_Backgroundmap_2,
+            "WildEast background": layer_WildEastbackground_1,
+            "Satellite background": layer_Satellitebackground_0,
+        })
+        .addTo(map);
+    setBounds();
+    L.ImageOverlay.include({
+        getBounds: function () {
+            return this._bounds;
+        },
+    });
+    resetLabels([layer_GardenPledges_11]);
+    map.on("zoomend", function () {
+        resetLabels([layer_GardenPledges_11]);
+    });
+    map.on("layeradd", function () {
+        resetLabels([layer_GardenPledges_11]);
+    });
+    map.on("layerremove", function () {
+        resetLabels([layer_GardenPledges_11]);
+    });
+
+    // Initialise the FeatureGroup to store editable layers
+    let editableLayers = new L.FeatureGroup();
+    map.addLayer(editableLayers);
+
+    // Temporary Drawing
+    let tempDrawing;
+
+    var drawPluginOptions = {
+        position: "topright",
+        draw: {
+            polygon: {
+                allowIntersection: false, // Restricts shapes to simple polygons
+                drawError: {
+                    color: "#e1e100", // Color the shape will turn when intersects
+                    message: "<strong>Oh snap!<strong> you can't draw that!", // Message that will show when intersect
+                },
+                shapeOptions: {
+                    color: "#97009c",
+                },
+            },
+            // disable toolbar item by setting it to false
+            polyline: false,
+            circle: false, // Turns off this drawing tool
+            circlemarker: false,
+            rectangle: false,
+            marker: true,
+        },
+        edit: {
+            featureGroup: editableLayers,
+            remove: true,
+        },
+    };
+
+    // Area Calculation
+    function createAreaTooltip(layer) {
+        if (layer.areaTooltip) {
+            return;
+        }
+
+        layer.areaTooltip = L.tooltip({
+            permanent: true,
+            direction: "center",
+            className: "area-tooltip",
+        });
+
+        layer.on("remove", function (event) {
+            layer.areaTooltip.remove();
+        });
+
+        layer.on("add", function (event) {
+            updateAreaTooltip(layer);
+            layer.areaTooltip.addTo(map);
+        });
+
+        if (map.hasLayer(layer)) {
+            updateAreaTooltip(layer);
+            layer.areaTooltip.addTo(map);
+        }
+    }
+
+    function updateAreaTooltip(layer) {
+        var area = L.GeometryUtil.geodesicArea(layer.getLatLngs()[0]);
+        var readableArea = L.GeometryUtil.readableArea(area, true);
+
+        var latlng = layer.getCenter();
+
+        layer.areaTooltip.setContent(readableArea).setLatLng(latlng);
+    }
+
+    // Initialise the draw control and pass it the FeatureGroup of editable layers
+    var drawControl = new L.Control.Draw(drawPluginOptions);
+    map.addControl(drawControl);
+
+    map.on(L.Draw.Event.CREATED, function (e) {
+        const modal = new Promise(function (resolve, reject) {
+            document.getElementById("newShapeForm").reset();
+
+            $("#newShape").modal("show");
+
+            if (e.layerType == 'marker') {
+                $('#areaFields').show();
+            } else {
+                $('#areaFields').hide();
+            }
+
+            $("#newShape .btn-save").click(function () {
+                resolve("user clicked");
+            });
+            $("#newShape .btn-cancel").click(function () {
+                reject("user clicked cancel");
+            });
+        })
+            .then(function (val) {
+                //val is your returned value. argument called with resolve.
+
+                let type = e.layerType;
+                let layer = e.layer;
+
+                feature = layer.feature = layer.feature || {};
+                feature.type = feature.type || "Feature";
+                let props = (feature.properties = feature.properties || {});
+
+                props.Name = $("#name").val();
+                props.Postcode = $("#postcode").val();
+                props.Notes = $("#notes").val();
+
+                if (type === "polygon") {
+                    createAreaTooltip(layer);
+
+                    let area = L.GeometryUtil.geodesicArea(layer.getLatLngs()[0]);
+                    props.Hectares = (area / 10000).toFixed(2);
+                    props.Acres = ((area / 10000) * 2.47105381).toFixed(2);
+                }
+
+                layer.feature.properties = props;
+
+                editableLayers.clearLayers();
+                editableLayers.addLayer(layer);
+
+                postGeoJSON(editableLayers);
+
+                $("#newShape").modal("hide");
+            })
+            .catch(function (err) {
+                //user clicked cancel
+                console.log("user clicked cancel", err);
+            });
+    });
+
+    map.on(L.Draw.Event.EDITED, function (event) {
+        event.layers.getLayers().forEach(function (layer) {
+            if (layer instanceof L.Polygon) {
+                updateAreaTooltip(layer);
+            }
+        });
+    });
+
+    /*
+    L.easyButton("fa-save", function (btn, map) {
+        if (editableLayers.toGeoJSON().features.length) {
+            let jsonData = JSON.stringify(editableLayers.toGeoJSON());
+            saveGeoJson(jsonData);
+        } else {
+            alert("Nothing to save!");
+        }
+    }).addTo(map);
+
+    L.easyButton("fa-upload", function (btn, map) {
+        if (editableLayers.toGeoJSON().features.length) {
+            postGeoJSON(editableLayers);
+        } else {
+            alert("Nothing to upload!");
+        }
+    }).addTo(map);
+
+    function saveGeoJson(content) {
+        filename = "userdata.json";
+        contentType = "text/plain";
+
+        const a = document.createElement("a");
+        const file = new Blob([content], {type: contentType});
+
+        a.href = URL.createObjectURL(file);
+        a.download = filename;
+        a.click();
+
+        URL.revokeObjectURL(a.href);
+    }
+    */
+
+    function postGeoJSON(featureGroup) {
+        let csrfToken = Cookies.get('csrftoken')
+
+        const headers = {
+            'X-CSRFToken': csrfToken
+        }
+
+        let data = {
+            'type': 1,
+            'first_name': document.getElementById('firstName').value,
+            'last_name': document.getElementById('lastName').value,
+            'email': document.getElementById('email').value,
+            'city': document.getElementById('city').value,
+            'phone': document.getElementById('phone').value,
+            'street': document.getElementById('street').value,
+            'postcode': document.getElementById('postcode').value,
+            'area': document.getElementById('area').value,
+            'measurement_unit': document.getElementById('measurementUnit').value,
+            'notes': document.getElementById('notes').value,
+            'geom': editableLayers.toGeoJSON().features[0].geometry
+        }
+
+        axios
+            .post("http://localhost:8080/api/pledge/create",
+                data,
+                {
+                    headers: headers
+                })
+            .then((response) => {
+                console.log(response.data);
+            })
+            .catch((error) => console.error(error));
+    }
+</script>
+</body>
+</html>
