@@ -22,7 +22,7 @@ RUN apt-get update \
 
 # Setup GDAL
 RUN apt-get update &&\
-   apt-get install -y binutils libproj-dev gdal-bin python-gdal python3-gdal
+   apt-get install -y make binutils libproj-dev gdal-bin python-gdal python3-gdal net-tools
 
 # upgrade pip version
 RUN pip install --upgrade pip
