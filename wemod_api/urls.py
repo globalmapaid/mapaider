@@ -21,7 +21,8 @@ from wemod_api import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('pledges.urls')),
-    path('make-pledge', make_pledge, name='make-pledge')
+    path('api/', include('pledges.urls')),
+    path('make-pledge', make_pledge, name='make-pledge'),
+    path('import', import_shapefile)
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

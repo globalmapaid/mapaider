@@ -1,4 +1,4 @@
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import ensure_csrf_cookie
 from rest_framework import viewsets
 from rest_framework.decorators import api_view
@@ -6,6 +6,8 @@ from rest_framework.response import Response
 
 from .serializers import *
 from django.shortcuts import render
+from .ShapeImporter import ShapeImporter
+from .models import Pledge
 
 
 class PledgeViewSet(viewsets.ModelViewSet):
@@ -49,3 +51,12 @@ def pledge_create(request):
         serializer.save()
 
     return Response(serializer.data)
+
+
+def import_shapefile(request):
+    Pledge.truncate()
+
+    ShapeImporter.import_farm_pledges()
+    ShapeImporter.import_garden_pledges()
+
+    return HttpResponse('OK!')
