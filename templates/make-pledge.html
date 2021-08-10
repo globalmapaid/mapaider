@@ -173,6 +173,7 @@
 <script src="/static/js/labels.js"></script>
 <script src="/static/js/leaflet-control-geocoder.Geocoder.js"></script>
 <script src="/static/js/leaflet.markercluster.js"></script>
+<script src="/static/js/map.js"></script>
 <script src="/static/data/Schools_3.js"></script>
 <script src="/static/data/SchoolPledges_4.js"></script>
 <script src="/static/data/Churches_5.js"></script>
@@ -204,9 +205,6 @@
     });
 
     var bounds_group = new L.featureGroup([]);
-
-    function setBounds() {
-    }
 
     map.createPane("pane_Satellitebackground_0");
     //map.getPane("pane_Satellitebackground_0").style.zIndex = 200;
@@ -1159,106 +1157,138 @@
     bounds_group.addLayer(layer_GovernmentPledges_10);
     map.addLayer(layer_GovernmentPledges_10);
 
+
+    /* Garden Pledges */
+
+
     function pop_GardenPledges_11(feature, layer) {
-        var popupContent =
-            '<table>\
-                      <tr>\
-                          <th scope="row">fid</th>\
-                          <td>' +
-            (feature.properties["fid"] !== null
-                ? autolinker.link(feature.properties["fid"].toLocaleString())
-                : "") +
-            '</td>\
-                      </tr>\
-                      <tr>\
-                          <th scope="row">Pledge date</th>\
-                          <td>' +
-            (feature.properties["Date"] !== null
-                ? autolinker.link(feature.properties["Date"].toLocaleString())
-                : "") +
-            '</td>\
-                      </tr>\
-                      <tr>\
-                          <th scope="row">Description</th>\
-                          <td>' +
-            (feature.properties["Type"] !== null
-                ? autolinker.link(feature.properties["Type"].toLocaleString())
-                : "") +
-            '</td>\
-                      </tr>\
-                      <tr>\
-                          <th scope="row">Name</th>\
-                          <td>' +
-            (feature.properties["Firstname"] !== null
-                ? autolinker.link(feature.properties["Firstname"].toLocaleString())
-                : "") +
-            '</td>\
-                      </tr>\
-                      <tr>\
-                          <th scope="row">Postcode</th>\
-                          <td>' +
-            (feature.properties["Postcode"] !== null
-                ? autolinker.link(feature.properties["Postcode"].toLocaleString())
-                : "") +
-            '</td>\
-                      </tr>\
-                      <tr>\
-                          <th scope="row">Notes</th>\
-                          <td>' +
-            (feature.properties["Notes"] !== null
-                ? autolinker.link(feature.properties["Notes"].toLocaleString())
-                : "") +
-            '</td>\
-                      </tr>\
-                      <tr>\
-                          <th scope="row">Acres</th>\
-                          <td>' +
-            (feature.properties["Acres"] !== null
-                ? autolinker.link(feature.properties["Acres"].toLocaleString())
-                : "") +
-            '</td>\
-                      </tr>\
-                      <tr>\
-                          <th scope="row">Hectares</th>\
-                          <td>' +
-            (feature.properties["Hectares"] !== null
-                ? autolinker.link(feature.properties["Hectares"].toLocaleString())
-                : "") +
-            '</td>\
-                      </tr>\
-                      <tr>\
-                          <th scope="row">Sq metres</th>\
-                          <td>' +
-            (feature.properties["m2"] !== null
-                ? autolinker.link(feature.properties["m2"].toLocaleString())
-                : "") +
-            '</td>\
-                      </tr>\
-                      <tr>\
-                          <th scope="row">Photo link</th>\
-                          <td>' +
-            (feature.properties["Photo_link"] !== null
-                ? autolinker.link(feature.properties["Photo_link"].toLocaleString())
-                : "") +
-            '</td>\
-                      </tr>\
-                      <tr>\
-                          <th scope="row">Video link</th>\
-                          <td>' +
-            (feature.properties["Video_link"] !== null
-                ? autolinker.link(feature.properties["Video_link"].toLocaleString())
-                : "") +
-            '</td>\
-                      </tr>\
-                      <tr>\
-                          <th scope="row">Pledged</th>\
-                          <td>' +
-            (feature.properties["Pledged"] !== null
-                ? autolinker.link(feature.properties["Pledged"].toLocaleString())
-                : "") +
-            "</td>\
-                      </tr>\
-                  </table>";
+        // var popupContent =
+        //     '<table>\
+        //               <tr>\
+        //                   <th scope="row">fid</th>\
+        //                   <td>' +
+        //     (feature.properties["fid"] !== null
+        //         ? autolinker.link(feature.properties["fid"].toLocaleString())
+        //         : "") +
+        //     '</td>\
+        //               </tr>\
+        //               <tr>\
+        //                   <th scope="row">Pledge date</th>\
+        //                   <td>' +
+        //     (feature.properties["Date"] !== null
+        //         ? autolinker.link(feature.properties["Date"].toLocaleString())
+        //         : "") +
+        //     '</td>\
+        //               </tr>\
+        //               <tr>\
+        //                   <th scope="row">Description</th>\
+        //                   <td>' +
+        //     (feature.properties["Type"] !== null
+        //         ? autolinker.link(feature.properties["Type"].toLocaleString())
+        //         : "") +
+        //     '</td>\
+        //               </tr>\
+        //               <tr>\
+        //                   <th scope="row">Name</th>\
+        //                   <td>' +
+        //     (feature.properties["Firstname"] !== null
+        //         ? autolinker.link(feature.properties["Firstname"].toLocaleString())
+        //         : "") +
+        //     '</td>\
+        //               </tr>\
+        //               <tr>\
+        //                   <th scope="row">Postcode</th>\
+        //                   <td>' +
+        //     (feature.properties["Postcode"] !== null
+        //         ? autolinker.link(feature.properties["Postcode"].toLocaleString())
+        //         : "") +
+        //     '</td>\
+        //               </tr>\
+        //               <tr>\
+        //                   <th scope="row">Notes</th>\
+        //                   <td>' +
+        //     (feature.properties["Notes"] !== null
+        //         ? autolinker.link(feature.properties["Notes"].toLocaleString())
+        //         : "") +
+        //     '</td>\
+        //               </tr>\
+        //               <tr>\
+        //                   <th scope="row">Acres</th>\
+        //                   <td>' +
+        //     (feature.properties["Acres"] !== null
+        //         ? autolinker.link(feature.properties["Acres"].toLocaleString())
+        //         : "") +
+        //     '</td>\
+        //               </tr>\
+        //               <tr>\
+        //                   <th scope="row">Hectares</th>\
+        //                   <td>' +
+        //     (feature.properties["Hectares"] !== null
+        //         ? autolinker.link(feature.properties["Hectares"].toLocaleString())
+        //         : "") +
+        //     '</td>\
+        //               </tr>\
+        //               <tr>\
+        //                   <th scope="row">Sq metres</th>\
+        //                   <td>' +
+        //     (feature.properties["m2"] !== null
+        //         ? autolinker.link(feature.properties["m2"].toLocaleString())
+        //         : "") +
+        //     '</td>\
+        //               </tr>\
+        //               <tr>\
+        //                   <th scope="row">Photo link</th>\
+        //                   <td>' +
+        //     (feature.properties["Photo_link"] !== null
+        //         ? autolinker.link(feature.properties["Photo_link"].toLocaleString())
+        //         : "") +
+        //     '</td>\
+        //               </tr>\
+        //               <tr>\
+        //                   <th scope="row">Video link</th>\
+        //                   <td>' +
+        //     (feature.properties["Video_link"] !== null
+        //         ? autolinker.link(feature.properties["Video_link"].toLocaleString())
+        //         : "") +
+        //     '</td>\
+        //               </tr>\
+        //               <tr>\
+        //                   <th scope="row">Pledged</th>\
+        //                   <td>' +
+        //     (feature.properties["Pledged"] !== null
+        //         ? autolinker.link(feature.properties["Pledged"].toLocaleString())
+        //         : "") +
+        //     "</td>\
+        //               </tr>\
+        //           </table>";
+        popupContent = `
+            <table>
+                <tr>
+                    <th scope="row">ID</th>
+                    <td>${feature.id}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Name</th>
+                    <td>${feature.properties.first_name}</td>
+                </tr>
+                <tr>
+                    <th scope="row">City</th>
+                    <td>${feature.properties.city}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Postcode</th>
+                    <td>${feature.properties.postcode}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Area</th>
+                    <td>${parseFloat(feature.properties.area).toFixed(2) + ' ' + feature.properties.measurement_unit}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Notes</th>
+                    <td>${feature.properties.notes}</td>
+                </tr>
+            </table>        
+        `
         layer.bindPopup(popupContent, {maxHeight: 400});
     }
 
@@ -1275,120 +1305,46 @@
         };
     }
 
-    map.createPane("pane_GardenPledges_11");
-    map.getPane("pane_GardenPledges_11").style.zIndex = 411;
-    map.getPane("pane_GardenPledges_11").style["mix-blend-mode"] = "normal";
-    var layer_GardenPledges_11 = new L.geoJson(json_GardenPledges_11, {
-        attribution: "",
-        interactive: true,
-        dataVar: "json_GardenPledges_11",
-        layerName: "layer_GardenPledges_11",
-        pane: "pane_GardenPledges_11",
-        onEachFeature: pop_GardenPledges_11,
-        pointToLayer: function (feature, latlng) {
-            var context = {
-                feature: feature,
-                variables: {},
-            };
-            return L.marker(latlng, style_GardenPledges_11_0(feature));
-        },
-    });
-    bounds_group.addLayer(layer_GardenPledges_11);
-    map.addLayer(layer_GardenPledges_11);
-    var title = new L.Control();
-    title.onAdd = function (map) {
-        this._div = L.DomUtil.create("div", "info");
-        this.update();
-        return this._div;
-    };
-    title.update = function () {
-        this._div.innerHTML = "<h2>WildEast Map of Dreams</h2>";
-    };
-    title.addTo(map);
-    var osmGeocoder = new L.Control.Geocoder({
-        collapsed: true,
-        position: "topleft",
-        text: "Search",
-        title: "Testing",
-    }).addTo(map);
-    document.getElementsByClassName(
-        "leaflet-control-geocoder-icon"
-    )[0].className += " fa fa-search";
-    document.getElementsByClassName(
-        "leaflet-control-geocoder-icon"
-    )[0].title += "Search for a place";
-    var baseMaps = {};
-    L.control
-        .layers(baseMaps, {
-            '<img src="/static/legend/GardenPledges_11.png" /> Garden Pledges':
-            layer_GardenPledges_11,
-            '<img src="/static/legend/GovernmentPledges_10.png" /> Government Pledges':
-            layer_GovernmentPledges_10,
-            '<img src="/static/legend/Government_9.png" /> Government':
-            cluster_Government_9,
-            '<img src="/static/legend/FarmPledges_8.png" /> Farm Pledges':
-            layer_FarmPledges_8,
-            '<img src="/static/legend/Farms_7.png" /> Farms': cluster_Farms_7,
-            '<img src="/static/legend/ChurchPledge_6.png" /> Church Pledge':
-            layer_ChurchPledge_6,
-            '<img src="/static/legend/Churches_5.png" /> Churches': cluster_Churches_5,
-            '<img src="/static/legend/SchoolPledges_4.png" /> School Pledges':
-            layer_SchoolPledges_4,
-            '<img src="/static/legend/Schools_3.png" /> Schools': cluster_Schools_3,
-            "Background map": layer_Backgroundmap_2,
-            "WildEast background": layer_WildEastbackground_1,
-            "Satellite background": layer_Satellitebackground_0,
-        })
-        .addTo(map);
-    setBounds();
+    // map.createPane("pane_GardenPledges_11");
+    // map.getPane("pane_GardenPledges_11").style.zIndex = 411;
+    // map.getPane("pane_GardenPledges_11").style["mix-blend-mode"] = "normal";
+    // var layer_GardenPledges_11 = new L.geoJson(json_GardenPledges_11, {
+    //     attribution: "",
+    //     interactive: true,
+    //     dataVar: "json_GardenPledges_11",
+    //     layerName: "layer_GardenPledges_11",
+    //     pane: "pane_GardenPledges_11",
+    //     onEachFeature: pop_GardenPledges_11,
+    //     pointToLayer: function (feature, latlng) {
+    //         var context = {
+    //             feature: feature,
+    //             variables: {},
+    //         };
+    //         return L.marker(latlng, style_GardenPledges_11_0(feature));
+    //     },
+    // });
+    // bounds_group.addLayer(layer_GardenPledges_11);
+    // map.addLayer(layer_GardenPledges_11);
+
+    /*
+
+    */
     L.ImageOverlay.include({
         getBounds: function () {
             return this._bounds;
         },
     });
-    resetLabels([layer_GardenPledges_11]);
-    map.on("zoomend", function () {
-        resetLabels([layer_GardenPledges_11]);
-    });
-    map.on("layeradd", function () {
-        resetLabels([layer_GardenPledges_11]);
-    });
-    map.on("layerremove", function () {
-        resetLabels([layer_GardenPledges_11]);
-    });
+    // resetLabels([layer_GardenPledges_11]);
+    // map.on("zoomend", function () {
+    //     resetLabels([layer_GardenPledges_11]);
+    // });
+    // map.on("layeradd", function () {
+    //     resetLabels([layer_GardenPledges_11]);
+    // });
+    // map.on("layerremove", function () {
+    //     resetLabels([layer_GardenPledges_11]);
+    // });
 
-    // Initialise the FeatureGroup to store editable layers
-    let editableLayers = new L.FeatureGroup();
-    map.addLayer(editableLayers);
-
-    // Temporary Drawing
-    let tempDrawing;
-
-    var drawPluginOptions = {
-        position: "topright",
-        draw: {
-            polygon: {
-                allowIntersection: false, // Restricts shapes to simple polygons
-                drawError: {
-                    color: "#e1e100", // Color the shape will turn when intersects
-                    message: "<strong>Oh snap!<strong> you can't draw that!", // Message that will show when intersect
-                },
-                shapeOptions: {
-                    color: "#97009c",
-                },
-            },
-            // disable toolbar item by setting it to false
-            polyline: false,
-            circle: false, // Turns off this drawing tool
-            circlemarker: false,
-            rectangle: false,
-            marker: true,
-        },
-        edit: {
-            featureGroup: editableLayers,
-            remove: true,
-        },
-    };
 
     // Area Calculation
     function createAreaTooltip(layer) {
@@ -1426,9 +1382,7 @@
         layer.areaTooltip.setContent(readableArea).setLatLng(latlng);
     }
 
-    // Initialise the draw control and pass it the FeatureGroup of editable layers
-    var drawControl = new L.Control.Draw(drawPluginOptions);
-    map.addControl(drawControl);
+
 
     map.on(L.Draw.Event.CREATED, function (e) {
         const modal = new Promise(function (resolve, reject) {
@@ -1560,6 +1514,49 @@
             })
             .catch((error) => console.error(error));
     }
+
+
+
+    const buildMap = (geojson) => {
+        map.createPane("pane_GardenPledges_11");
+        map.getPane("pane_GardenPledges_11").style.zIndex = 411;
+        map.getPane("pane_GardenPledges_11").style["mix-blend-mode"] = "normal";
+        // json_GardenPledges_11
+        layers["GardenPledges"] = new L.geoJson(filterGeoJSONbyType(geojson, 1), {
+            attribution: "",
+            interactive: true,
+            dataVar: "json_GardenPledges_11",
+            layerName: "layer_GardenPledges_11",
+            pane: "pane_GardenPledges_11",
+            onEachFeature: pop_GardenPledges_11,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {},
+                };
+                return L.marker(latlng, style_GardenPledges_11_0(feature));
+            },
+        });
+        bounds_group.addLayer(layers["GardenPledges"]);
+        map.addLayer(layers["GardenPledges"]);
+
+
+        createSearchPanel()
+        createTitlePanel()
+        createLayerPanel()
+        createEditPanel()
+    }
+
+    const loadGeoJSON = () => {
+        axios.get('/api/pledge/list')
+            .then(response => {
+                buildMap(response.data)
+            })
+    }
+
+    window.addEventListener('load', (event) => {
+        loadGeoJSON()
+    });
 </script>
 </body>
 </html>

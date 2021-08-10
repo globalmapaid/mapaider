@@ -108,6 +108,7 @@ celerybeat.pid
 
 # Environments
 .env
+.env.server
 .venv
 env/
 venv/
@@ -140,3 +141,4 @@ dmypy.json
 cython_debug/
 
 .idea
+/static/data
