@@ -2,6 +2,7 @@ from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import ensure_csrf_cookie
 from rest_framework import viewsets
 from rest_framework.decorators import api_view
+from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 
 from .serializers import *
@@ -31,10 +32,9 @@ def make_pledge(request):
 
 @api_view(["GET"])
 def pledge_list(request):
-    pledges = Pledge.objects.all()
+    pledges = Pledge.objects.filter(visibility__gt=0).exclude(geom_type__isnull=True)
     serializer = PledgeSerializer(pledges, many=True)
     return Response(serializer.data)
-
 
 @api_view(["GET"])
 def pledge_detail(request, uuid):

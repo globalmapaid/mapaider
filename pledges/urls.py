@@ -11,7 +11,8 @@ urlpatterns = router.urls
 urlpatterns += [
     path("pledge", api_overview, name="api-overview"),
     path("pledge/list", pledge_list, name="pledge-list"),
+    # path('pledge/list', PledgeList.as_view(), name="pledge-filtered"),
     path("pledge/create", pledge_create, name="pledge-create"),
-    path("pledge/<str:uuid>", pledge_detail, name="pledge-detail"),
+    # path("pledge/<str:uuid>", pledge_detail, name="pledge-detail"),
 
 ]
