@@ -14,7 +14,7 @@ class PledgeAdmin(LeafletGeoAdmin):
     list_display_links = ['name']
     actions_on_bottom = True
     list_editable = ['visibility']
-    search_fields = ['first_name', 'last_name']
+    search_fields = ['uuid', 'first_name', 'last_name']
     list_filter = ['type', 'geom_type', 'submitted_at']
 
     ordering = ['-submitted_at']
