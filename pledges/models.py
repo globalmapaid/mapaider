@@ -58,6 +58,7 @@ class Pledge(models.Model):
     city = models.CharField(max_length=100, null=True, blank=True)
     postcode = models.CharField(max_length=12,null=True, blank=True)
     notes = models.CharField(max_length=255,null=True, blank=True)
+    reason = models.CharField(max_length=255,null=True, blank=True)
     visibility=models.IntegerField(_('Visibility'), choices=VISIBILITY_OPTIONS, default=VIS_NONE)
     submitted_at = models.DateTimeField(_('Date Submitted'), null=True, blank=True)
     created_at = models.DateTimeField(_('Date Created'), auto_now_add=True)

@@ -40,14 +40,14 @@ const createLayerPanel = () => {
   var baseMaps = {};
   L.control
       .layers(baseMaps, {
-          '<img src="/static/legend/GardenPledges_11.png" /> Garden Pledges': layers["GardenPledges"],
+          '<img src="/static/legend/GardenPledges_11.png" /> Garden Pledges': layers["garden-pledges"],
           '<img src="/static/legend/GovernmentPledges_10.png" /> Government Pledges': layer_GovernmentPledges_10,
           '<img src="/static/legend/Government_9.png" /> Government': cluster_Government_9,
-          '<img src="/static/legend/FarmPledges_8.png" /> Farm Pledges': layer_FarmPledges_8,
+          '<img src="/static/legend/FarmPledges_8.png" /> Farm Pledges': layers["farm-pledges"],
           '<img src="/static/legend/Farms_7.png" /> Farms': cluster_Farms_7,
-          '<img src="/static/legend/ChurchPledge_6.png" /> Church Pledge': layer_ChurchPledge_6,
+          '<img src="/static/legend/ChurchPledge_6.png" /> Church Pledge': layers["church-pledges"],
           '<img src="/static/legend/Churches_5.png" /> Churches': cluster_Churches_5,
-          '<img src="/static/legend/SchoolPledges_4.png" /> School Pledges': layer_SchoolPledges_4,
+          '<img src="/static/legend/SchoolPledges_4.png" /> School Pledges': layers["school-pledges"],
           '<img src="/static/legend/Schools_3.png" /> Schools': cluster_Schools_3,
           "Background map": layer_Backgroundmap_2,
           "WildEast background": layer_WildEastbackground_1,
@@ -91,5 +91,6 @@ const createEditPanel = () => {
   var drawControl = new L.Control.Draw(drawPluginOptions);
   map.addControl(drawControl);
 }
+
 
 var layers = {}

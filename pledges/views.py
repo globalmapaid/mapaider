@@ -58,5 +58,7 @@ def import_shapefile(request):
 
     ShapeImporter.import_farm_pledges()
     ShapeImporter.import_garden_pledges()
+    ShapeImporter.import_church_pledges()
+    ShapeImporter.import_school_pledges()
 
     return HttpResponse('OK!')
