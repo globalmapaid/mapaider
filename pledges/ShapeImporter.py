@@ -177,3 +177,39 @@ class ShapeImporter:
             )
 
             new_pledge.save()
+
+    @classmethod
+    def import_government_pledges(cls):
+        filename = 'Government_Pledges.shp'
+        file_path = os.path.abspath(os.path.join(settings.BASE_DIR, 'static', 'data', 'shape', filename))
+
+        pledge_type = PledgeType.objects.get(slug='government-pledges')
+
+        ds = DataSource(file_path)
+        layer = ds[0]
+
+        for i, feat in enumerate(layer):
+            try:
+                geom = feat.geom.wkt
+                geom_type = feat.geom.geom_type
+            except GDALException:
+                geom = None
+                geom_type = None
+
+            area = feat.get('Hectares') if feat.get('Hectares') is not None else 0
+
+            new_pledge = Pledge(
+                type=pledge_type,
+                area=area,
+                geom=geom,
+                geom_type=geom_type,
+                measurement_unit='ha',
+                first_name=feat.get('Council'),
+                street=feat.get('Location'),
+                notes=feat.get('Descriptio'),
+                reason=feat.get('ReasonForP'),
+                submitted_at=datetime.now(tz=timezone('UTC')),
+                visibility=4
+            )
+
+            new_pledge.save()

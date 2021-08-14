@@ -706,129 +706,6 @@
 
     bounds_group.addLayer(layer_Government_9);
 
-    function pop_GovernmentPledges_10(feature, layer) {
-        var popupContent =
-            '<table>\
-                      <tr>\
-                          <th scope="row">Description</th>\
-                          <td>' +
-            (feature.properties["RNRSiteNo"] !== null
-                ? autolinker.link(feature.properties["RNRSiteNo"].toLocaleString())
-                : "") +
-            '</td>\
-                      </tr>\
-                      <tr>\
-                          <th scope="row">Reason for Pledging</th>\
-                          <td>' +
-            (feature.properties["ReasonForP"] !== null
-                ? autolinker.link(feature.properties["ReasonForP"].toLocaleString())
-                : "") +
-            '</td>\
-                      </tr>\
-                      <tr>\
-                          <th scope="row">Notes</th>\
-                          <td>' +
-            (feature.properties["Criteria"] !== null
-                ? autolinker.link(feature.properties["Criteria"].toLocaleString())
-                : "") +
-            '</td>\
-                      </tr>\
-                      <tr>\
-                          <th scope="row">Acres</th>\
-                          <td>' +
-            (feature.properties["Area acres"] !== null
-                ? autolinker.link(feature.properties["Area acres"].toLocaleString())
-                : "") +
-            '</td>\
-                      </tr>\
-                      <tr>\
-                          <th scope="row">Hectares</th>\
-                          <td>' +
-            (feature.properties["Area hectares"] !== null
-                ? autolinker.link(
-                    feature.properties["Area hectares"].toLocaleString()
-                )
-                : "") +
-            '</td>\
-                      </tr>\
-                      <tr>\
-                          <th scope="row">Photo</th>\
-                          <td>' +
-            (feature.properties["Photo_link"] !== null
-                ? autolinker.link(feature.properties["Photo_link"].toLocaleString())
-                : "") +
-            '</td>\
-                      </tr>\
-                      <tr>\
-                          <th scope="row">Video</th>\
-                          <td>' +
-            (feature.properties["Video_link"] !== null
-                ? autolinker.link(feature.properties["Video_link"].toLocaleString())
-                : "") +
-            '</td>\
-                      </tr>\
-                      <tr>\
-                          <th scope="row">Pledge link</th>\
-                          <td>' +
-            (feature.properties["Pledge_link"] !== null
-                ? autolinker.link(
-                    feature.properties["Pledge_link"].toLocaleString()
-                )
-                : "") +
-            '</td>\
-                      </tr>\
-                      <tr>\
-                          <th scope="row">Description</th>\
-                          <td>' +
-            (feature.properties["Description"] !== null
-                ? autolinker.link(
-                    feature.properties["Description"].toLocaleString()
-                )
-                : "") +
-            "</td>\
-                      </tr>\
-                  </table>";
-        layer.bindPopup(popupContent, {maxHeight: 400});
-    }
-
-    function style_GovernmentPledges_10_0() {
-        return {
-            pane: "pane_GovernmentPledges_10",
-            rotationAngle: 0.0,
-            rotationOrigin: "center center",
-            icon: L.icon({
-                iconUrl: "/static/markers/crown-green.svg",
-                iconSize: [23, 13],
-            }),
-            interactive: true,
-        };
-    }
-
-    map.createPane("pane_GovernmentPledges_10");
-    map.getPane("pane_GovernmentPledges_10").style.zIndex = 410;
-    map.getPane("pane_GovernmentPledges_10").style["mix-blend-mode"] =
-        "normal";
-    var layer_GovernmentPledges_10 = new L.geoJson(
-        json_GovernmentPledges_10,
-        {
-            attribution: "",
-            interactive: true,
-            dataVar: "json_GovernmentPledges_10",
-            layerName: "layer_GovernmentPledges_10",
-            pane: "pane_GovernmentPledges_10",
-            onEachFeature: pop_GovernmentPledges_10,
-            pointToLayer: function (feature, latlng) {
-                var context = {
-                    feature: feature,
-                    variables: {},
-                };
-                return L.marker(latlng, style_GovernmentPledges_10_0(feature));
-            },
-        }
-    );
-    bounds_group.addLayer(layer_GovernmentPledges_10);
-    map.addLayer(layer_GovernmentPledges_10);
-
     L.ImageOverlay.include({
         getBounds: function () {
             return this._bounds;
@@ -1063,6 +940,10 @@
                 iconUrl: "/static/markers/church_green.svg",
                 iconSize: [20, 20],
             }),
+            'government-pledges': L.icon({
+                iconUrl: "/static/markers/crown-green.svg",
+                iconSize: [23, 13],
+            }),
             'school-pledges': L.icon({
                 iconUrl: "/static/markers/paw_green.svg",
                 iconSize: [20, 20],
@@ -1082,6 +963,7 @@
         { id: 1, name: 'Garden Pledges', slug: 'garden-pledges'},
         { id: 2, name: 'Farm Pledges', slug: 'farm-pledges'},
         { id: 3, name: 'Church Pledges', slug: 'church-pledges'},
+        { id: 4, name: 'Government Pledges', slug: 'government-pledges'},
         { id: 5, name: 'School Pledges', slug: 'school-pledges'},
     ]
 

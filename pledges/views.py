@@ -60,5 +60,6 @@ def import_shapefile(request):
     ShapeImporter.import_garden_pledges()
     ShapeImporter.import_church_pledges()
     ShapeImporter.import_school_pledges()
+    ShapeImporter.import_government_pledges()
 
     return HttpResponse('OK!')

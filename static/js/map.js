@@ -41,7 +41,7 @@ const createLayerPanel = () => {
   L.control
       .layers(baseMaps, {
           '<img src="/static/legend/GardenPledges_11.png" /> Garden Pledges': layers["garden-pledges"],
-          '<img src="/static/legend/GovernmentPledges_10.png" /> Government Pledges': layer_GovernmentPledges_10,
+          '<img src="/static/legend/GovernmentPledges_10.png" /> Government Pledges': layers["government-pledges"],
           '<img src="/static/legend/Government_9.png" /> Government': cluster_Government_9,
           '<img src="/static/legend/FarmPledges_8.png" /> Farm Pledges': layers["farm-pledges"],
           '<img src="/static/legend/Farms_7.png" /> Farms': cluster_Farms_7,
