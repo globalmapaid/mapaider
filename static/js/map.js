@@ -49,6 +49,7 @@ const createLayerPanel = () => {
           '<img src="/static/legend/Churches_5.png" /> Churches': cluster_Churches_5,
           '<img src="/static/legend/SchoolPledges_4.png" /> School Pledges': layers["school-pledges"],
           '<img src="/static/legend/Schools_3.png" /> Schools': cluster_Schools_3,
+          '<img src="/static/legend/RailwayStationPledges.png" /> Railway Station Pledges': layers["railway-station-pledges"],
           "Background map": layer_Backgroundmap_2,
           "WildEast background": layer_WildEastbackground_1,
           "Satellite background": layer_Satellitebackground_0,
@@ -57,8 +58,7 @@ const createLayerPanel = () => {
 }
 
 const createEditPanel = () => {
-  // Initialise the FeatureGroup to store editable layers
-  let editableLayers = new L.FeatureGroup();
+  // Initialise the FeatureGroup to store editable layers  
   map.addLayer(editableLayers);
 
   var drawPluginOptions = {
@@ -92,5 +92,39 @@ const createEditPanel = () => {
   map.addControl(drawControl);
 }
 
-
 var layers = {}
+let editableLayers = new L.FeatureGroup();
+
+function postGeoJSON(featureGroup) {
+    let csrfToken = Cookies.get('csrftoken')
+
+    const headers = {
+        'X-CSRFToken': csrfToken
+    }
+
+    let data = {
+        'type': 1,
+        'first_name': document.getElementById('firstName').value,
+        'last_name': document.getElementById('lastName').value,
+        'email': document.getElementById('email').value,
+        'city': document.getElementById('city').value,
+        'phone': document.getElementById('phone').value,
+        'street': document.getElementById('street').value,
+        'postcode': document.getElementById('postcode').value,
+        'area': document.getElementById('area').value,
+        'measurement_unit': document.getElementById('measurementUnit').value,
+        'reason': document.getElementById('reason').value,
+        'geom': editableLayers.toGeoJSON().features[0].geometry
+    }
+
+    axios
+        .post("/api/pledge/create",
+            data,
+            {
+                headers: headers
+            })
+        .then((response) => {
+            console.log(response.data);
+        })
+        .catch((error) => console.error(error));
+}

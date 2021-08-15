@@ -213,3 +213,38 @@ class ShapeImporter:
             )
 
             new_pledge.save()
+
+    @classmethod
+    def import_railway_stations_pledges(cls):
+        filename = 'Railway_stations_pledges.shp'
+        file_path = os.path.abspath(os.path.join(settings.BASE_DIR, 'static', 'data', 'shape', filename))
+
+        pledge_type = PledgeType.objects.get(slug='railway-stations-pledges')
+
+        ds = DataSource(file_path)
+        layer = ds[0]
+
+        for i, feat in enumerate(layer):
+            try:
+                geom = feat.geom.wkt
+                geom_type = feat.geom.geom_type
+            except GDALException:
+                geom = None
+                geom_type = None
+
+            area = 0
+
+            new_pledge = Pledge(
+                type=pledge_type,
+                area=area,
+                geom=geom,
+                geom_type=geom_type,
+                measurement_unit='acres',
+                first_name=feat.get('Station ad'),
+                postcode=feat.get('Postcode'),
+                city=feat.get('Region'),
+                submitted_at=datetime.now(tz=timezone('UTC')),
+                visibility=4
+            )
+
+            new_pledge.save()

@@ -10,9 +10,8 @@ class PledgeSerializer(GeoFeatureModelSerializer):
     class Meta:
         model = Pledge
         geo_field = 'geom'
-        fields = ['uuid', 'type', 'geom', 'area', 'measurement_unit', 'first_name',
-                  'last_name', 'email', 'phone', 'street', 'city','postcode', 'notes', 'visibility']
-        read_only_fields = ['uuid', 'created_at', 'updated_at']
+        fields = ['uuid', 'geom', 'area', 'measurement_unit', 'first_name', 'last_name', 'email', 'phone', 'street', 'city','postcode', 'type', 'notes', 'reason']
+        read_only_fields = ['uuid', 'created_at', 'updated_at', 'submitted_at', 'visibility']
 
     def get_postcode(self, instance):
         if instance.visibility == 2:

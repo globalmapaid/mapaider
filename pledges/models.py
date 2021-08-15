@@ -1,4 +1,6 @@
 import uuid as uuid
+from datetime import datetime
+from pytz import timezone
 from django.contrib.gis.db import models
 from django.db import connection
 from django.utils.text import slugify
@@ -77,7 +79,9 @@ class Pledge(models.Model):
     def name(self):
         first_name = self.first_name if self.first_name is not None else ''
         last_name = self.last_name if self.last_name is not None else ''
-        return ' '.join([first_name, last_name])
+        name = ' '.join([first_name, last_name]).strip()
+
+        return name if name != '' else '<Unnamed>'
 
     def __str__(self):
         return self.name
@@ -86,6 +90,8 @@ class Pledge(models.Model):
         if self.geom is not None:
 
             self.geom_type = self.geom.geom_type
+            if self.submitted_at is None:
+                self.submitted_at = datetime.now(tz=timezone('UTC'))
 
             if self.geom.geom_type == 'Polygon':
                 geom = self.geom.transform(27700, clone=True)

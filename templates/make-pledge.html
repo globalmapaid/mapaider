@@ -147,8 +147,8 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="notes">In your words, why are you pledging to The WildEast?</label>
-                        <textarea class="form-control form-control-sm" id="notes"></textarea>
+                        <label for="reason">In your words, why are you pledging to The WildEast?</label>
+                        <textarea class="form-control form-control-sm" id="reason"></textarea>
                     </div>
                 </form>
             </div>
@@ -175,14 +175,9 @@
 <script src="/static/js/leaflet.markercluster.js"></script>
 <script src="/static/js/map.js"></script>
 <script src="/static/data/Schools_3.js"></script>
-<script src="/static/data/SchoolPledges_4.js"></script>
 <script src="/static/data/Churches_5.js"></script>
-<script src="/static/data/ChurchPledge_6.js"></script>
 <script src="/static/data/Farms_7.js"></script>
-<script src="/static/data/FarmPledges_8.js"></script>
 <script src="/static/data/Government_9.js"></script>
-<script src="/static/data/GovernmentPledges_10.js"></script>
-<script src="/static/data/GardenPledges_11.js"></script>
 
 <script>
     var map = L.map("map", {
@@ -858,39 +853,6 @@
     }
     */
 
-    function postGeoJSON(featureGroup) {
-        let csrfToken = Cookies.get('csrftoken')
-
-        const headers = {
-            'X-CSRFToken': csrfToken
-        }
-
-        let data = {
-            'type': 1,
-            'first_name': document.getElementById('firstName').value,
-            'last_name': document.getElementById('lastName').value,
-            'email': document.getElementById('email').value,
-            'city': document.getElementById('city').value,
-            'phone': document.getElementById('phone').value,
-            'street': document.getElementById('street').value,
-            'postcode': document.getElementById('postcode').value,
-            'area': document.getElementById('area').value,
-            'measurement_unit': document.getElementById('measurementUnit').value,
-            'notes': document.getElementById('notes').value,
-            'geom': editableLayers.toGeoJSON().features[0].geometry
-        }
-
-        axios
-            .post("/api/pledge/create",
-                data,
-                {
-                    headers: headers
-                })
-            .then((response) => {
-                console.log(response.data);
-            })
-            .catch((error) => console.error(error));
-    }
 
 
     function popupPledge(feature, layer) {
@@ -948,6 +910,10 @@
                 iconUrl: "/static/markers/paw_green.svg",
                 iconSize: [20, 20],
             }),
+            'railway-station-pledges': L.icon({
+                iconUrl: "/static/markers/green-steam-train.svg",
+                iconSize: [20, 20],
+            }),
         }
 
         return {
@@ -965,6 +931,7 @@
         { id: 3, name: 'Church Pledges', slug: 'church-pledges'},
         { id: 4, name: 'Government Pledges', slug: 'government-pledges'},
         { id: 5, name: 'School Pledges', slug: 'school-pledges'},
+        { id: 8, name: 'Railway Station Pledges', slug: 'railway-station-pledges'},
     ]
 
     const buildMap = (geojson) => {

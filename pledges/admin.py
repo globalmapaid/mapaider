@@ -15,7 +15,7 @@ class PledgeAdmin(LeafletGeoAdmin):
     actions_on_bottom = True
     list_editable = ['visibility']
     search_fields = ['uuid', 'first_name', 'last_name']
-    list_filter = ['type', 'geom_type', 'submitted_at']
+    list_filter = ['type', 'geom_type', 'visibility', 'submitted_at']
 
     ordering = ['-submitted_at']
 
