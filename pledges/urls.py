@@ -14,5 +14,4 @@ urlpatterns += [
     # path('pledge/list', PledgeList.as_view(), name="pledge-filtered"),
     path("pledge/create", pledge_create, name="pledge-create"),
     # path("pledge/<str:uuid>", pledge_detail, name="pledge-detail"),
-
 ]
