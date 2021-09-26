@@ -769,29 +769,28 @@
                 <tr>
                     <th scope="row">ID</th>
                     <td>${feature.id}</td>
-                </tr>
-                <tr>
-                    <th scope="row">Name</th>
-                    <td>${feature.properties.first_name}</td>
-                </tr>
-                <tr>
-                    <th scope="row">City</th>
-                    <td>${feature.properties.city}</td>
-                </tr>
-                <tr>
-                    <th scope="row">Postcode</th>
-                    <td>${feature.properties.postcode}</td>
-                </tr>
-                <tr>
-                    <th scope="row">Area</th>
-                    <td>${area}</td>
-                </tr>
-                <tr>
-                    <th scope="row">Notes</th>
-                    <td>${feature.properties.notes}</td>
-                </tr>
-            </table>        
-        `
+                </tr>`
+        
+        if (feature.properties.first_name != null) 
+          popupContent += `<tr><th scope="row">Name</th><td>${feature.properties.first_name}</td></tr>`
+
+        if (feature.properties.city != null)
+          popupContent += `<tr><th scope="row">City</th><td>${feature.properties.city}</td></tr>`
+        
+        if (feature.properties.postcode != null)
+          popupContent += `<tr><th scope="row">Postcode</th><td>${feature.properties.postcode}</td></tr>`    
+
+        if (feature.properties.area > 0)
+          popupContent += `<tr><th scope="row">Area</th><td>${area}</td></tr>`
+        
+        if (feature.properties.notes != null)
+          popupContent += `<tr><th scope="row">Notes</th><td>${feature.properties.notes}</td></tr>`    
+        
+        if (feature.properties.reason != null)
+          popupContent += `<tr><th scope="row">Reason to pledge</th><td>${feature.properties.reason}</td></tr>`    
+
+        popupContent += `</table>`
+        
         layer.bindPopup(popupContent, { maxHeight: 400 })
       }
 

@@ -45,7 +45,7 @@ def pledge_detail(request, uuid):
 
 @api_view(["POST"])
 def pledge_create(request):
-    serializer = PledgeSerializer(data=request.data)
+    serializer = PledgeCreateSerializer(data=request.data)
 
     if serializer.is_valid():
         serializer.save()

@@ -13,10 +13,6 @@ MEASUREMENT_UNITS = [
 ]
 
 
-
-
-
-
 class PledgeType(models.Model):
     name = models.CharField(max_length=80)
     slug = models.SlugField(max_length=80, unique=True)
@@ -56,12 +52,12 @@ class Pledge(models.Model):
     last_name = models.CharField(max_length=40, null=True, blank=True)
     email = models.EmailField(null=True, blank=True)
     phone = models.CharField(max_length=20, null=True, blank=True)
-    street = models.CharField(max_length=100,null=True, blank=True)
+    street = models.CharField(max_length=100, null=True, blank=True)
     city = models.CharField(max_length=100, null=True, blank=True)
-    postcode = models.CharField(max_length=12,null=True, blank=True)
-    notes = models.CharField(max_length=255,null=True, blank=True)
-    reason = models.CharField(max_length=255,null=True, blank=True)
-    visibility=models.IntegerField(_('Visibility'), choices=VISIBILITY_OPTIONS, default=VIS_NONE)
+    postcode = models.CharField(max_length=12, null=True, blank=True)
+    notes = models.CharField(max_length=255, null=True, blank=True)
+    reason = models.CharField(max_length=255, null=True, blank=True)
+    visibility = models.IntegerField(_('Visibility'), choices=VISIBILITY_OPTIONS, default=VIS_NONE)
     submitted_at = models.DateTimeField(_('Date Submitted'), null=True, blank=True)
     created_at = models.DateTimeField(_('Date Created'), auto_now_add=True)
     updated_at = models.DateTimeField(_('Date Updated'), auto_now=True)

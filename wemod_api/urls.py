@@ -19,6 +19,8 @@ from django.urls import path, include
 from pledges.views import *
 from wemod_api import settings
 
+admin.site.site_url = "/make-pledge"
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('pledges.urls')),
