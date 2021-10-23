@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from .serializers import *
 from django.shortcuts import render
 from .ShapeImporter import ShapeImporter
-from .models import Pledge
+from .models import Pledge, PledgeType
 
 
 class PledgeViewSet(viewsets.ModelViewSet):
@@ -36,10 +36,18 @@ def pledge_list(request):
     serializer = PledgeSerializer(pledges, many=True)
     return Response(serializer.data)
 
+
 @api_view(["GET"])
 def pledge_list_compact(request):
     pledges = Pledge.objects.filter(visibility__gt=0).exclude(geom_type__isnull=True)
     serializer = PledgeListCompactSerializer(pledges, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
+def pledge_type_list(request):
+    pledge_types = PledgeType.objects.all()
+    serializer = PledgeTypeSerializer(pledge_types, many=True)
     return Response(serializer.data)
 
 

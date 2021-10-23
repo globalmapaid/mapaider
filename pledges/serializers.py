@@ -1,7 +1,14 @@
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
-from .models import Pledge
+from .models import Pledge, PledgeType
+
+
+class PledgeTypeSerializer(ModelSerializer):
+    class Meta:
+        model = PledgeType
+        fields = ['id', 'name']
+        read_only_fields = ['id', 'name']
 
 
 class PledgeSerializer(GeoFeatureModelSerializer):
