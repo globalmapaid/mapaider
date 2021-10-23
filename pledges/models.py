@@ -1,5 +1,7 @@
 import uuid as uuid
 from datetime import datetime
+
+from django.contrib.gis.geos import Point, Polygon
 from pytz import timezone
 from django.contrib.gis.db import models
 from django.db import connection
@@ -47,6 +49,8 @@ class Pledge(models.Model):
     geom_type = models.CharField(max_length=16, null=True, blank=True)
     area = models.DecimalField(max_digits=16, decimal_places=6, default=0)
     measurement_unit = models.CharField(max_length=6, choices=MEASUREMENT_UNITS, default='ha')
+    latitude = models.DecimalField(max_digits=10, decimal_places=7, null=True, blank=True)
+    longitude = models.DecimalField(max_digits=10, decimal_places=7, null=True, blank=True)
 
     first_name = models.CharField(max_length=40, null=True, blank=True)
     last_name = models.CharField(max_length=40, null=True, blank=True)
@@ -89,8 +93,19 @@ class Pledge(models.Model):
             if self.submitted_at is None:
                 self.submitted_at = datetime.now(tz=timezone('UTC'))
 
+            centroid: Point
             if self.geom.geom_type == 'Polygon':
+                self.geom: Polygon
                 geom = self.geom.transform(27700, clone=True)
                 self.area = geom.area / 10000
                 self.measurement_unit = 'ha'
+
+                centroid = self.geom.centroid
+            elif self.geom.geom_type == 'Point':
+                self.geom: Point
+                centroid = self.geom.centroid
+            (self.longitude, self.latitude) = centroid.coords
+        else:
+            self.longitude = None
+            self.latitude = None
         return super().save(*args, **kwargs)

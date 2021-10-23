@@ -37,6 +37,13 @@ def pledge_list(request):
     return Response(serializer.data)
 
 @api_view(["GET"])
+def pledge_list_compact(request):
+    pledges = Pledge.objects.filter(visibility__gt=0).exclude(geom_type__isnull=True)
+    serializer = PledgeListCompactSerializer(pledges, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
 def pledge_detail(request, uuid):
     pledges = Pledge.objects.get(pk=uuid)
     serializer = PledgeSerializer(pledges, many=False)
@@ -62,5 +69,14 @@ def import_shapefile(request):
     ShapeImporter.import_school_pledges()
     ShapeImporter.import_government_pledges()
     ShapeImporter.import_railway_stations_pledges()
+
+    return HttpResponse('OK!')
+
+
+def resave_all(request):
+    pledges = Pledge.objects.all()
+
+    for pledge in pledges:
+        pledge.save()
 
     return HttpResponse('OK!')

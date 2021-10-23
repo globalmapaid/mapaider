@@ -25,6 +25,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('pledges.urls')),
     path('make-pledge', make_pledge, name='make-pledge'),
-    path('import', import_shapefile)
+    # path('import', import_shapefile)
+    path('resave', resave_all)
+
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
