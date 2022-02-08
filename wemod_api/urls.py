@@ -26,7 +26,7 @@ urlpatterns = [
     path('api/', include('pledges.urls')),
     path('make-pledge', make_pledge, name='make-pledge'),
     # path('import', import_shapefile)
-    path('import', import_excel)
+    # path('import', import_excel)
     # path('resave', resave_all)
 
 ]
