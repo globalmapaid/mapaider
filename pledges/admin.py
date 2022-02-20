@@ -2,13 +2,14 @@ from django.contrib import admin
 from leaflet.admin import LeafletGeoAdmin
 from .models import Pledge, PledgeType
 
-
+@admin.register(PledgeType)
 class PledgeTypeAdmin(admin.ModelAdmin):
     list_display = ['id', 'name', 'slug']
     readonly_fields = ['id']
     list_display_links = ['id', 'name']
 
 
+@admin.register(Pledge)
 class PledgeAdmin(LeafletGeoAdmin):
     list_display = ['name', 'type', 'geom_type', 'get_acres', 'get_hectares', 'visibility', 'submitted_at']
     list_display_links = ['name']
@@ -16,6 +17,7 @@ class PledgeAdmin(LeafletGeoAdmin):
     list_editable = ['visibility']
     search_fields = ['uuid', 'first_name', 'last_name']
     list_filter = ['type', 'geom_type', 'visibility', 'submitted_at']
+    date_hierarchy = 'submitted_at'
 
     ordering = ['-submitted_at']
 
@@ -54,9 +56,6 @@ class PledgeAdmin(LeafletGeoAdmin):
 
     get_hectares.short_description = 'Hectares'
 
-
-admin.site.register(PledgeType, PledgeTypeAdmin)
-admin.site.register(Pledge, PledgeAdmin)
 
 admin.site.site_header = 'Global MapAid'
 admin.site.site_title = 'GMA'

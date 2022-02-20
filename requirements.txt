@@ -1,10 +1,10 @@
-asgiref==3.3.4
-Django==3.2.5
+asgiref==3.5.0
+Django==4.0.2
 django-environ==0.4.5
 django-filter==2.4.0
 django-leaflet==0.28.0
-djangorestframework==3.12.4
-djangorestframework-gis==0.17
+djangorestframework==3.13.1
+djangorestframework-gis==0.18
 et-xmlfile==1.1.0
 numpy==1.22.2
 openpyxl==3.0.9
