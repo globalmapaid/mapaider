@@ -42,10 +42,16 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.gis',
+
+    # 3rd Party Apps
     'rest_framework',
     'rest_framework_gis',
+    'knox',
     'leaflet',
     # 'corsheaders',
+
+    # User Apps
+    'users',
     'pledges'
 ]
 
@@ -93,6 +99,8 @@ DATABASES = {
         'PORT': env('PG_PORT'),
     }
 }
+
+AUTH_USER_MODEL = 'users.User'
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
