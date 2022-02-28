@@ -36,9 +36,9 @@ def api_overview(request):
 
 @ensure_csrf_cookie
 def make_pledge(request):
-    return render(request, "make-pledge.html", )
+    return render(request, "pledge-make.html", )
 
-@ensure_csrf_cookie
+
 def pledge_map(request):
     return render(request, "pledge-map.html", )
 
@@ -93,6 +93,7 @@ def import_shapefile(request):
 
     return HttpResponse('OK!')
 
+
 def import_excel(request):
     filename = 'update-20220205.xlsx'
     file_path = os.path.abspath(os.path.join(settings.BASE_DIR, 'static', 'data', 'excel', filename))
@@ -106,7 +107,7 @@ def import_excel(request):
 
     def format_data(item):
         item['submission_date'] = parser.parse(item['submission_date'])
-        item['postcode'] = None if item['postcode']  is None else str(item['postcode']).upper()
+        item['postcode'] = None if item['postcode'] is None else str(item['postcode']).upper()
         return item
 
     data_dict = list(map(format_data, df.to_dict(orient='records')))
@@ -147,11 +148,9 @@ def import_excel(request):
         except ValueError:
             pass
 
-
-
-
     return HttpResponse('Allright!')
     pass
+
 
 def resave_all(request):
     pledges = Pledge.objects.all()

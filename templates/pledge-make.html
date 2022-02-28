@@ -8,6 +8,12 @@
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
 
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+      crossorigin="anonymous"
+    />
 
     <link rel="stylesheet" href="/static/css/leaflet.css" />
     <link rel="stylesheet" href="/static/css/qgis2web.css" />
@@ -15,14 +21,8 @@
     <link rel="stylesheet" href="/static/css/MarkerCluster.css" />
     <link rel="stylesheet" href="/static/css/MarkerCluster.Default.css" />
     <link rel="stylesheet" href="/static/css/leaflet-control-geocoder.Geocoder.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-draw@1.0.4/dist/leaflet.draw.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.css" />
-
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-      integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
-      crossorigin="anonymous"
-    />
 
     <style>
       html,
@@ -70,8 +70,100 @@
   <body>
     <div id="map"></div>
 
+    <!-- Modal Box for new shapes-->
+    <div class="modal" tabindex="-1" role="dialog" id="newShape" x-data="{pledgeType: 1}">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">New Pledge</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form id="newShapeForm">
+              <div class="row">
+                <div class="col">
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="pledge-type" id="pledgeTypeGarden" value="1" x-model="pledgeType" checked />
+                    <label class="form-check-label" for="pledgeTypeGarden">I want to pledge my garden</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="pledge-type" id="pledgeTypeFarm" value="2" x-model="pledgeType" />
+                    <label class="form-check-label" for="pledgeTypeFarm">I want to pledge my farm</label>
+                  </div>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="form-group col-md-6">
+                  <label for="notes">Your Name</label>
+                  <input type="text" class="form-control form-control-sm" id="firstName" placeholder="First Name" />
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="notes">Surname</label>
+                  <input type="text" class="form-control form-control-sm" id="lastName" placeholder="Last Name" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="notes">Email</label>
+                <input type="text" class="form-control form-control-sm" id="email" placeholder="Email" />
+              </div>
+              <div class="row">
+                <div class="form-group col-md-6">
+                  <label for="notes">Phone</label>
+                  <input type="text" class="form-control form-control-sm" id="phone" placeholder="Phone" />
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="postcode">Your Postcode</label>
+                  <input type="text" class="form-control form-control-sm" id="postcode" placeholder="Postcode" />
+                </div>
+              </div>
+              <div class="row">
+                <div class="form-group col-md-6">
+                  <label for="street">Your street name</label>
+                  <input type="text" class="form-control form-control-sm" id="street" />
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="city">Your town/village/city</label>
+                  <input type="text" class="form-control form-control-sm" id="city" />
+                </div>
+              </div>
+              <div id="areaFields">
+                <div class="form-group">
+                  <label for="area">How much land are you pledging?</label>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <input type="number" class="form-control form-control-sm" id="area" value="10" name="area" />
+                    </div>
+                    <div class="col-md-6">
+                      <select class="form-control form-control-sm" id="measurementUnit">
+                        <option value="m2">m<sup>2</sup></option>
+                        <option value="acres">Acres</option>
+                        <option selected="selected" value="ha">Hectares</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group" x-show="pledgeType == 1">
+                <label for="reason">In your words, why are you pledging to The WildEast?</label>
+                <textarea class="form-control form-control-sm" id="reason"></textarea>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-save btn-primary">Make Pledge</button>
+            <button type="button" class="btn btn-cancel btn-secondary" data-dismiss="modal">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script src="/static/js/qgis2web_expressions.js"></script>
     <script src="/static/js/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet-draw@1.0.4/dist/leaflet.draw.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.js"></script>
     <script src="/static/js/leaflet.rotatedMarker.js"></script>
     <script src="/static/js/leaflet.pattern.js"></script>
@@ -578,6 +670,70 @@
         layer.areaTooltip.setContent(readableArea).setLatLng(latlng)
       }
 
+      map.on(L.Draw.Event.CREATED, function (e) {
+        const modal = new Promise(function (resolve, reject) {
+          document.getElementById("newShapeForm").reset()
+
+          $("#newShape").modal("show")
+
+          if (e.layerType == "marker") {
+            $("#areaFields").show()
+          } else {
+            $("#areaFields").hide()
+          }
+
+          $("#newShape .btn-save").click(function () {
+            resolve("user clicked")
+          })
+          $("#newShape .btn-cancel").click(function () {
+            reject("user clicked cancel")
+          })
+        })
+          .then(function (val) {
+            //val is your returned value. argument called with resolve.
+
+            let type = e.layerType
+            let layer = e.layer
+
+            feature = layer.feature = layer.feature || {}
+            feature.type = feature.type || "Feature"
+            let props = (feature.properties = feature.properties || {})
+
+            props.Name = $("#name").val()
+            props.Postcode = $("#postcode").val()
+            props.Notes = $("#notes").val()
+
+            if (type === "polygon") {
+              createAreaTooltip(layer)
+
+              let area = L.GeometryUtil.geodesicArea(layer.getLatLngs()[0])
+              props.Hectares = (area / 10000).toFixed(2)
+              props.Acres = ((area / 10000) * 2.47105381).toFixed(2)
+            }
+
+            layer.feature.properties = props
+
+            editableLayers.clearLayers()
+            editableLayers.addLayer(layer)
+
+            postGeoJSON(editableLayers)
+
+            $("#newShape").modal("hide")
+          })
+          .catch(function (err) {
+            //user clicked cancel
+            console.log("user clicked cancel", err)
+          })
+      })
+
+      map.on(L.Draw.Event.EDITED, function (event) {
+        event.layers.getLayers().forEach(function (layer) {
+          if (layer instanceof L.Polygon) {
+            updateAreaTooltip(layer)
+          }
+        })
+      })
+
       /*
     L.easyButton("fa-save", function (btn, map) {
         if (editableLayers.toGeoJSON().features.length) {
@@ -719,7 +875,8 @@
 
         createSearchPanel()
         createTitlePanel()
-        createLayerPanel(false)
+        createLayerPanel()
+        createEditPanel()
       }
 
       const loadGeoJSON = () => {
