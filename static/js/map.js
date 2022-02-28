@@ -37,7 +37,7 @@ const createSearchPanel = () => {
         "Search for a place"
 }
 
-const createLayerPanel = () => {
+const createLayerPanel = (collapsed=true) => {
     var baseMaps = {}
     L.control
         .layers(baseMaps, {
@@ -62,7 +62,7 @@ const createLayerPanel = () => {
             "Background map": layer_Backgroundmap_2,
             "WildEast background": layer_WildEastbackground_1,
             "Satellite background": layer_Satellitebackground_0,
-        })
+        }, {collapsed: collapsed})
         .addTo(map)
 }
 

@@ -19,15 +19,14 @@ from django.urls import path, include
 from pledges.views import *
 from wemod_api import settings
 
-admin.site.site_url = "/make-pledge"
+admin.site.site_url = "/pledge/map"
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('pledges.urls')),
-    path('make-pledge', make_pledge, name='make-pledge'),
+    path('pledge/', include('pledges.urls')),
+    path('api/pledge/', include('pledges.urls_api')),
     # path('import', import_shapefile)
     # path('import', import_excel)
     # path('resave', resave_all)
-
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

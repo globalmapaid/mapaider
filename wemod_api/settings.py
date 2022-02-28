@@ -13,9 +13,8 @@ import os
 from pathlib import Path
 import environ
 
-env=environ.Env(DEBUG=(bool, False))
+env = environ.Env(DEBUG=(bool, False))
 environ.Env.read_env(env_file='.env')
-
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -30,7 +29,6 @@ SECRET_KEY = env('SECRET_KEY')
 DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = env('ALLOWED_HOSTS').split(' ')
-
 
 # Application definition
 
@@ -52,7 +50,8 @@ INSTALLED_APPS = [
 
     # User Apps
     'users',
-    'pledges'
+    'pledges',
+    'incubators'
 ]
 
 MIDDLEWARE = [
@@ -160,6 +159,3 @@ LEAFLET_CONFIG = {
     'SCALE': 'both',
     'ATTRIBUTION_PREFIX': 'Wild East - Map of Dreams'
 }
-
-
-
