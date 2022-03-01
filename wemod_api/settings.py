@@ -45,8 +45,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_gis',
     'knox',
+    'corsheaders',
     'leaflet',
-    # 'corsheaders',
 
     # User Apps
     'users',
@@ -57,7 +57,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    # 'corsheaders.middleware.CorsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -145,10 +145,13 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), ]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',),
+}
+
+CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOWED_ORIGINS = [
-    "http://gmapledge.esemen.com",
-    "http://localhost:8000",
-    "http://127.0.0.1:8000",
+    'http://localhost:3000'
 ]
 
 LEAFLET_CONFIG = {

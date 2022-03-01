@@ -34,7 +34,7 @@ def api_overview(request):
     return Response(api_urls)
 
 
-@ensure_csrf_cookie
+# @ensure_csrf_cookie
 def make_pledge(request):
     return render(request, "pledge-make.html", )
 

@@ -105,10 +105,10 @@ var layers = {}
 let editableLayers = new L.FeatureGroup()
 
 function postGeoJSON(featureGroup) {
-    let csrfToken = Cookies.get("csrftoken")
+    // let csrfToken = Cookies.get("csrftoken")
 
     const headers = {
-        "X-CSRFToken": csrfToken,
+    //     "X-CSRFToken": csrfToken,
     }
 
     let data = {
