@@ -5,7 +5,7 @@ from django.db import DataError
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.contrib.gis.geos import Point
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from rest_framework.decorators import api_view
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
@@ -78,7 +78,7 @@ def pledge_create(request):
     if serializer.is_valid():
         serializer.save()
 
-    return Response(serializer.data)
+    return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 def import_shapefile(request):
