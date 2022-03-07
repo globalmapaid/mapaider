@@ -51,7 +51,8 @@ INSTALLED_APPS = [
     # User Apps
     'users',
     'pledges',
-    'incubators'
+    'incubators',
+    'mapaider'
 ]
 
 MIDDLEWARE = [
