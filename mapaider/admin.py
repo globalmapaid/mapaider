@@ -1,5 +1,7 @@
 from django.contrib import admin
-from .models import Organization, Map, Layer, MapLayer
+from leaflet.admin import LeafletGeoAdmin
+
+from .models import Organization, Map, Layer, MapLayer, MapFeature
 
 
 @admin.register(MapLayer)
@@ -11,6 +13,11 @@ class MapLayerAdmin(admin.ModelAdmin):
     @admin.display(ordering='author__organization')
     def get_organization(self, obj):
         return obj.map.organization
+
+
+@admin.register(MapFeature)
+class MapFeatureAdmin(LeafletGeoAdmin):
+    list_display = ['name', 'layer', 'geom_type', 'visibility']
 
 
 admin.site.register([Organization, Map, Layer])
