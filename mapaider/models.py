@@ -79,8 +79,6 @@ class Layer(models.Model):
     created_at = models.DateTimeField(_('Date Created'), auto_now_add=True)
     updated_at = models.DateTimeField(_('Date Updated'), auto_now=True)
 
-    maps = models.ManyToManyField('Map', through='MapLayer')
-
     class Meta:
         verbose_name = 'Layer'
         verbose_name_plural = 'Layers'
@@ -117,7 +115,7 @@ class MapFeature(models.Model):
     ]
 
     uuid = models.UUIDField(db_index=True, default=uuid.uuid4, editable=False)
-    layer = models.ForeignKey('Layer', on_delete=models.CASCADE)
+    layer = models.ForeignKey('Layer', related_name='features', on_delete=models.CASCADE)
     name = models.CharField(_('feature name'), max_length=80)
     geom = models.GeometryField(_('geometry'), srid=4326, null=True, geography=True)
     geom_type = models.CharField(_('geometry type'), max_length=16, null=True, blank=True)

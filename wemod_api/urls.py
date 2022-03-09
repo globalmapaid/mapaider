@@ -25,6 +25,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('pledge/', include('pledges.urls')),
     path('api/pledge/', include('pledges.urls_api')),
+    path('api/mapaider/', include('mapaider.urls')),
     # path('import', import_shapefile)
     # path('import', import_excel)
     # path('resave', resave_all)
