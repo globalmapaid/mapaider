@@ -88,7 +88,6 @@ class Pledge(models.Model):
 
     def save(self, *args, **kwargs):
         if self.geom is not None:
-
             self.geom_type = self.geom.geom_type
             if self.submitted_at is None:
                 self.submitted_at = datetime.now(tz=timezone('UTC'))

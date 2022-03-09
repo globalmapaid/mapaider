@@ -10,7 +10,8 @@ class MapAPIView(RetrieveAPIView):
     lookup_field = 'uuid'
 
     def get_queryset(self):
-        return Map.objects.prefetch_related('layers').all()
+        return Map.objects.prefetch_related('layers').prefetch_related(
+            'layers__features')
 
 
 class LayerAPIView(RetrieveAPIView):
