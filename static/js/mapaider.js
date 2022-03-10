@@ -21,7 +21,7 @@ const createLinksPanel = () => {
         return this._div
     }
     links.update = function () {
-        this._div.innerHTML = "<a href='https://www.globalmapaid.org/'>Global Map Aid</a>"
+        this._div.innerHTML = "<a href='https://www.globalmapaid.org/donate-now/'>Donate Map Aid</a>"
     }
     links.addTo(map)
 }
