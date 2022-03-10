@@ -47,7 +47,7 @@
         }
     </style>
 
-    <title>WildEast Map of Dreams</title>
+    <title>MapAider - Map Viewer</title>
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.2/dist/alpine.min.js" defer></script>
     <script
             src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
@@ -188,19 +188,6 @@
         }
     }
 
-    const layerTypes = [
-        {id: 1, name: "Garden Pledges", slug: "garden-pledges"},
-        {id: 2, name: "Farm Pledges", slug: "farm-pledges"},
-        {id: 3, name: "Church Pledges", slug: "church-pledges"},
-        {id: 4, name: "Government Pledges", slug: "government-pledges"},
-        {id: 5, name: "School Pledges", slug: "school-pledges"},
-        {
-            id: 8,
-            name: "Railway Station Pledges",
-            slug: "railway-station-pledges",
-        },
-    ]
-
     const buildMap = (mapData) => {
         // Put the search panel
         createSearchPanel()
@@ -216,7 +203,7 @@
             pane.style.zIndex = 410 + item.priority
             pane.style["mix-blend-mode"] = "normal"
 
-            layers[item.uuid] = new L.geoJson(item.feature_set,{
+            layers[item.uuid] = new L.geoJson(item.feature_set, {
                 attribution: '',
                 interactive: true,
                 layerName: "layer_" + item.uuid,
@@ -236,7 +223,11 @@
         })
 
         createLayerPanel(mapLayers, getLayerStyle, false)
-        createLinksPanel()
+        createLinksPanel([
+            {label: 'DEC', url: 'https://www.dec.org.uk/appeal/ukraine-humanitarian-appeal'},
+            {label: 'Polish Rooms', url: 'https://www.linkedin.com/posts/jakub-zielinski-content_ukraine-stopwar-unitedwithukraine-activity-6904360265387700224-laV0'},
+            {label: 'Ukraine Border Crossings', url: 'https://bit.ly/uaborders'},
+        ])
     }
 
     const loadGeoJSON = () => {

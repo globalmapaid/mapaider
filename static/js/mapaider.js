@@ -12,18 +12,27 @@ const createTitlePanel = (mapTitle) => {
     title.addTo(map)
 }
 
-const createLinksPanel = () => {
-    var links = new L.Control()
+const createLinksPanel = (links = []) => {
+    var linksPanel = new L.Control()
 
-    links.onAdd = function (map) {
+    linksPanel.onAdd = function (map) {
         this._div = L.DomUtil.create("div", "info")
         this.update()
         return this._div
     }
-    links.update = function () {
-        this._div.innerHTML = "<a href='https://www.globalmapaid.org/donate-now/' target='_blank'>Donate Map Aid</a>"
+    linksPanel.update = function () {
+        let panelContent = '<strong>Related Links</strong>'
+        links.forEach((item) => {
+            panelContent += `
+<div>
+<a href='${item.url}' target='_blank'>
+${item.label}
+</a>
+</div>`
+        })
+        this._div.innerHTML = panelContent
     }
-    links.addTo(map)
+    linksPanel.addTo(map)
 }
 
 const createSearchPanel = () => {
