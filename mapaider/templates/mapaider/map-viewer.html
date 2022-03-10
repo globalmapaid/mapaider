@@ -1,0 +1,252 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width"/>
+    <meta name="mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+
+
+    <link rel="stylesheet" href="/static/css/leaflet.css"/>
+    <link rel="stylesheet" href="/static/css/qgis2web.css"/>
+    <link rel="stylesheet" href="/static/css/fontawesome-all.min.css"/>
+    <link rel="stylesheet" href="/static/css/MarkerCluster.css"/>
+    <link rel="stylesheet" href="/static/css/MarkerCluster.Default.css"/>
+    <link rel="stylesheet" href="/static/css/leaflet-control-geocoder.Geocoder.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.css"/>
+
+    <link
+            rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+            integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+            crossorigin="anonymous"
+    />
+
+    <style>
+        html,
+        body,
+        #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+
+        .area-tooltip {
+            background: #363636;
+            background: rgba(0, 0, 0, 0.5);
+            border: none;
+            color: #f8d5e4;
+        }
+
+        .leaflet-control-container .info h2 {
+            font-size: 1rem;
+            font-weight: bold;
+        }
+    </style>
+
+    <title>WildEast Map of Dreams</title>
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.2/dist/alpine.min.js" defer></script>
+    <script
+            src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"
+    ></script>
+    <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"
+    ></script>
+    <script
+            src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+<div id="map"></div>
+
+<script src="/static/js/qgis2web_expressions.js"></script>
+<script src="/static/js/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.js"></script>
+<script src="/static/js/leaflet.rotatedMarker.js"></script>
+<script src="/static/js/leaflet.pattern.js"></script>
+<script src="/static/js/leaflet-hash.js"></script>
+<script src="/static/js/Autolinker.min.js"></script>
+<script src="/static/js/rbush.min.js"></script>
+<script src="/static/js/labelgun.min.js"></script>
+<script src="/static/js/labels.js"></script>
+<script src="/static/js/leaflet-control-geocoder.Geocoder.js"></script>
+<script src="/static/js/leaflet.markercluster.js"></script>
+<script src="/static/js/mapaider.js"></script>
+
+<script>
+    var map = L.map("map", {
+        zoomControl: true,
+        maxZoom: 28,
+        minZoom: 2,
+    }).fitBounds([
+        [51.23908874836559, -100.7748474896206704],
+        [53.14254326217286, 122.162353031732282],
+    ])
+
+    var hash = new L.Hash(map)
+
+    map.attributionControl.setPrefix(
+        'Powered by <a href="https://www.globalmapaid.org" target="_blank">GlobalMapAid</a> &middot; Donate</a>'
+    )
+
+    var autolinker = new Autolinker({
+        truncate: {length: 30, location: "smart"},
+    })
+
+    var bounds_group = new L.featureGroup([])
+
+    map.createPane("pane_Satellitebackground_0")
+    //map.getPane("pane_Satellitebackground_0").style.zIndex = 200;
+    var layer_Satellitebackground_0 = L.tileLayer("https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}", {
+        pane: "pane_Satellitebackground_0",
+        opacity: 0.8,
+        attribution: "",
+        minZoom: 1,
+        maxZoom: 28,
+        minNativeZoom: 0,
+        maxNativeZoom: 18,
+    }).addTo(map)
+    map.addLayer(layer_Satellitebackground_0);
+
+    map.createPane("pane_Backgroundmap_2")
+    //map.getPane("pane_Backgroundmap_2").style.zIndex = 201;
+    var layer_Backgroundmap_2 = L.tileLayer(
+        "https://maps.googleapis.com/maps/vt?pb=!1m5!1m4!1i{z}!2i{x}!3i{y}!4i256!2m3!1e0!2sm!3i512225992!3m17!2sen!3sUS!5e18!12m4!1e68!2m2!1sset!2sRoadmap!12m3!1e37!2m1!1ssmartmaps!12m4!1e26!2m2!1sstyles!2zcy50OjV8cC5oOiNGRkJCMDB8cC5zOjQzLjQwMDAwMDAwMDAwMDAwNnxwLmw6MzcuNTk5OTk5OTk5OTk5OTk0fHAuZzoxLHMudDo0OXxwLmg6I0ZGQzIwMHxwLnM6LTYxLjh8cC5sOjQ1LjU5OTk5OTk5OTk5OTk5NHxwLmc6MSxzLnQ6NTB8cC5oOiNGRjAzMDB8cC5zOi0xMDB8cC5sOjUxLjE5OTk5OTk5OTk5OTk5fHAuZzoxLHMudDo1MXxwLmg6I0ZGMDMwMHxwLnM6LTEwMHxwLmw6NTJ8cC5nOjEscy50OjZ8cC5oOiMwMDc4RkZ8cC5zOi0xMy4yMDAwMDAwMDAwMDAwMDN8cC5sOjIuNDAwMDAwMDAwMDAwMDA1N3xwLmc6MSxzLnQ6MnxwLmg6IzAwRkY2QXxwLnM6LTEuMDk4OTAxMDk4OTAxMTIzNHxwLmw6MTEuMjAwMDAwMDAwMDAwMDE3fHAuZzox!4e0&key=AIzaSyAOqYYyBbtXQEtcHG7hwAwyCPQSYidG8yU&token=14219",
+        {
+            pane: "pane_Backgroundmap_2",
+            opacity: 0.5,
+            attribution: "",
+            minZoom: 1,
+            maxZoom: 28,
+            minNativeZoom: 0,
+            maxNativeZoom: 18,
+        }
+    )
+    map.addLayer(layer_Backgroundmap_2)
+
+    L.ImageOverlay.include({
+        getBounds: function () {
+            return this._bounds
+        },
+    })
+
+
+    function featurePopup(feature, layer) {
+        popupContent = `
+            <table>
+                <tr>
+                    <th scope="row">Company Name </th>
+                    <td>: ${feature.properties.name}</td>
+                </tr>`
+
+        if (feature.properties.feature_data.business != null)
+            popupContent += `<tr><th scope="row">Business</th><td>: ${feature.properties.feature_data.business}</td></tr>`
+        if (feature.properties.feature_data.sector != null)
+            popupContent += `<tr><th scope="row">Sector</th><td>: ${feature.properties.feature_data.sector}</td></tr>`
+        if (feature.properties.feature_data.sanction != null)
+            popupContent += `<tr><th scope="row">Nature of Sanction</th><td>: ${feature.properties.feature_data.sanction}</td></tr>`
+        if (feature.properties.feature_data.hq != null)
+            popupContent += `<tr><th scope="row">Headquarter</th><td>: ${feature.properties.feature_data.hq}</td></tr>`
+        if (feature.properties.feature_data.address != null)
+            popupContent += `<tr><th scope="row">Location</th><td>: ${feature.properties.feature_data.address}</td></tr>`
+
+
+        popupContent += `</table>`
+
+        layer.bindPopup(popupContent, {maxHeight: 400})
+    }
+
+    function getLayerStyle(layer) {
+        layer_icons = {
+            "db7242d0-8897-4ec8-a196-d621d2adebd8": L.icon({
+                iconUrl: "/static/markers/ukraine-flag.svg",
+                iconSize: [32, 32],
+            }),
+            "33b2fa68-008c-495a-83bb-ee14f3c2aa89": L.icon({
+                iconUrl: "/static/markers/russia-flag-circle.svg",
+                iconSize: [24, 24],
+            })
+        }
+
+        return {
+            pane: "pane_" + layer,
+            rotationAngle: 0.0,
+            rotationOrigin: "center center",
+            icon: layer_icons[layer],
+            interactive: true,
+        }
+    }
+
+    const layerTypes = [
+        {id: 1, name: "Garden Pledges", slug: "garden-pledges"},
+        {id: 2, name: "Farm Pledges", slug: "farm-pledges"},
+        {id: 3, name: "Church Pledges", slug: "church-pledges"},
+        {id: 4, name: "Government Pledges", slug: "government-pledges"},
+        {id: 5, name: "School Pledges", slug: "school-pledges"},
+        {
+            id: 8,
+            name: "Railway Station Pledges",
+            slug: "railway-station-pledges",
+        },
+    ]
+
+    const buildMap = (mapData) => {
+        // Put the search panel
+        createSearchPanel()
+
+        // Put the map title
+        mapTitle = mapData.name
+        createTitlePanel(mapTitle)
+
+        mapLayers = mapData.layers
+
+        mapLayers.forEach((item) => {
+            let pane = map.createPane("pane_" + item.uuid)
+            pane.style.zIndex = 410 + item.priority
+            pane.style["mix-blend-mode"] = "normal"
+
+            layers[item.uuid] = new L.geoJson(item.feature_set,{
+                attribution: '',
+                interactive: true,
+                layerName: "layer_" + item.uuid,
+                pane: "pane_" + item.uuid,
+                onEachFeature: featurePopup,
+                pointToLayer: function (feature, latlng) {
+                    var context = {
+                        feature: feature,
+                        variables: {},
+                    }
+                    return L.marker(latlng, getLayerStyle(item.uuid))
+                },
+            })
+
+            bounds_group.addLayer(layers[item.uuid])
+            map.addLayer(layers[item.uuid])
+        })
+
+        createLayerPanel(mapLayers, getLayerStyle, false)
+    }
+
+    const loadGeoJSON = () => {
+        axios.get("/api/mapaider/map/cff37635-2947-4d3a-a9de-570e18e3097a").then((response) => {
+            buildMap(response.data)
+        })
+    }
+
+    window.addEventListener("load", (event) => {
+        loadGeoJSON()
+    })
+</script>
+</body>
+</html>

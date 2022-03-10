@@ -36,11 +36,11 @@ def api_overview(request):
 
 # @ensure_csrf_cookie
 def make_pledge(request):
-    return render(request, "pledge-make.html", )
+    return render(request, "pledges/pledge-make.html", )
 
 
 def pledge_map(request):
-    return render(request, "pledge-map.html", )
+    return render(request, "pledges/pledge-map.html", )
 
 
 @api_view(["GET"])
