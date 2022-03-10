@@ -12,6 +12,20 @@ const createTitlePanel = (mapTitle) => {
     title.addTo(map)
 }
 
+const createLinksPanel = () => {
+    var links = new L.Control()
+
+    links.onAdd = function (map) {
+        this._div = L.DomUtil.create("div", "info")
+        this.update()
+        return this._div
+    }
+    links.update = function () {
+        this._div.innerHTML = "<a href='https://www.globalmapaid.org/'>Global Map Aid</a>"
+    }
+    links.addTo(map)
+}
+
 const createSearchPanel = () => {
     var osmGeocoder = new L.Control.Geocoder({
         collapsed: true,
@@ -42,28 +56,6 @@ const createLayerPanel = (mapLayers, layerStyle, collapsed = true) => {
         "Background map": layer_Backgroundmap_2,
         "Satellite background": layer_Satellitebackground_0,
     }
-    /*
-        L.control
-            .layers(baseMaps, {
-                /*
-                '<img src="/static/legend/GardenPledges_11.png" /> Garden Pledges':
-                    layers["garden-pledges"],
-                '<img src="/static/legend/GovernmentPledges_10.png" /> Government Pledges':
-                    layers["government-pledges"],
-                '<img src="/static/legend/FarmPledges_8.png" /> Farm Pledges':
-                    layers["farm-pledges"],
-                '<img src="/static/legend/ChurchPledge_6.png" /> Church Pledge':
-                    layers["church-pledges"],
-                '<img src="/static/legend/SchoolPledges_4.png" /> School Pledges':
-                    layers["school-pledges"],
-                '<img src="/static/legend/RailwayStationPledges.png" /> Railway Station Pledges':
-                    layers["railway-station-pledges"],
-
-
-                "Background map": layer_Backgroundmap_2,
-                "Satellite background": layer_Satellitebackground_0,
-            }, {collapsed: collapsed})
-            .addTo(map)*/
 
     L.control.layers(baseMaps, layerSet, {collapsed: collapsed}).addTo(map)
 
