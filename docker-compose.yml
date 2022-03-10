@@ -23,7 +23,7 @@ services:
     image: kartoza/postgis:13.0
     container_name: wemod-db
     ports:
-      - 5432:5432
+      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql
     environment:
@@ -54,7 +54,7 @@ services:
       context: ./nginx
       dockerfile: Dockerfile.dev
     ports:
-      - 80:80
+      - "8080:8080"
     networks:
       - wemod-api
 
