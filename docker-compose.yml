@@ -54,7 +54,7 @@ services:
       context: ./nginx
       dockerfile: Dockerfile.dev
     ports:
-      - "8080:8080"
+      - "8090:8080"
     networks:
       - wemod-api
 
