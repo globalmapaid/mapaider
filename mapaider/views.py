@@ -1,5 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.views.decorators.clickjacking import xframe_options_exempt
 from rest_framework.generics import RetrieveAPIView
 
 from .models import Map, Layer, MapFeature
@@ -23,5 +24,6 @@ class LayerAPIView(RetrieveAPIView):
         return Layer.objects.all()
 
 
+@xframe_options_exempt
 def show_map(request, slug: str):
     return render(request, 'mapaider/map-viewer.html')
