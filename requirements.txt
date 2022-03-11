@@ -10,6 +10,7 @@ django-rest-knox==4.2.0
 djangorestframework==3.13.1
 djangorestframework-gis==0.18
 et-xmlfile==1.1.0
+gunicorn==20.1.0
 numpy==1.22.2
 openpyxl==3.0.9
 pandas==1.4.0
