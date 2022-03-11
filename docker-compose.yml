@@ -9,7 +9,6 @@ services:
     command: >
       sh -c "python3 manage.py collectstatic --noinput
       && python3 manage.py runserver 0.0.0.0:8000"
-#    command: python3 manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/app
 #    ports:
@@ -57,7 +56,7 @@ services:
       context: ./nginx
       dockerfile: Dockerfile.dev
     ports:
-      - "8090:8080"
+      - "8090:80"
     networks:
       - wemod-api
 
