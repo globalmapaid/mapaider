@@ -20,7 +20,7 @@ class MapFeatureAdmin(LeafletGeoAdmin):
     list_display = ['name', 'layer', 'geom_type', 'visibility']
     actions_on_bottom = True
     list_editable = ['visibility']
-    search_fields = ['uuid', 'name', 'layer']
+    search_fields = ['name']
     readonly_fields = ['latitude', 'longitude']
     list_filter = ['layer', 'geom_type', 'visibility', 'created_at']
     date_hierarchy = 'created_at'
