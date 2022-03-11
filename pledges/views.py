@@ -3,6 +3,7 @@ import os
 from django.conf import settings
 from django.db import DataError
 from django.http import JsonResponse, HttpResponse
+from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.contrib.gis.geos import Point
 from rest_framework import viewsets, status
@@ -34,11 +35,12 @@ def api_overview(request):
     return Response(api_urls)
 
 
-# @ensure_csrf_cookie
+@xframe_options_exempt
 def make_pledge(request):
     return render(request, "pledges/pledge-make.html", )
 
 
+@xframe_options_exempt
 def pledge_map(request):
     return render(request, "pledges/pledge-map.html", )
 

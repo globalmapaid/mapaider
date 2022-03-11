@@ -26,5 +26,10 @@ class MapFeatureAdmin(LeafletGeoAdmin):
     date_hierarchy = 'created_at'
     ordering = ['-created_at']
 
+    settings_overrides = {
+        'MIN_ZOOM': 3,
+        'MAX_ZOOM': 19,
+    }
+
 
 admin.site.register([Organization, Map, Layer])
