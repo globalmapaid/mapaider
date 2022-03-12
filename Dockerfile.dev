@@ -1,4 +1,4 @@
-FROM python:3.9-slim-buster
+FROM python:3.10-slim-buster
 
 # set our working directory inside the container (when it's finally created from this image)
 # depending on your environment you may need to
@@ -21,8 +21,8 @@ RUN apt-get update \
    && apt-get clean
 
 # Setup GDAL
-RUN apt-get update &&\
-   apt-get install -y make binutils libproj-dev gdal-bin python-gdal python3-gdal net-tools
+RUN apt update -y &&\
+   apt install -y make binutils libproj-dev gdal-bin python-gdal python3-gdal net-tools build-essential libpq-dev
 
 # upgrade pip version
 RUN pip install --upgrade pip
