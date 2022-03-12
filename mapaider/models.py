@@ -76,6 +76,7 @@ class Layer(models.Model):
             'Unselect this instead of deleting layers.'
         ),
     )
+    contribution = models.BooleanField(default=False)
     created_at = models.DateTimeField(_('Date Created'), auto_now_add=True)
     updated_at = models.DateTimeField(_('Date Updated'), auto_now=True)
 
@@ -88,6 +89,7 @@ class Layer(models.Model):
 
 
 class MapLayer(models.Model):
+    uuid = models.UUIDField(db_index=True, default=uuid.uuid4, editable=False)
     map = models.ForeignKey('Map', on_delete=models.CASCADE)
     layer = models.ForeignKey('Layer', on_delete=models.CASCADE)
     label = models.CharField(
@@ -95,6 +97,9 @@ class MapLayer(models.Model):
         max_length=80, blank=True, null=True,
         help_text='Leave blank to inherit the layer name')
     priority = models.PositiveSmallIntegerField(default=1)
+    contribution = models.BooleanField(default=False)
+    created_at = models.DateTimeField(_('Date Created'), auto_now_add=True)
+    updated_at = models.DateTimeField(_('Date Updated'), auto_now=True)
 
     class Meta:
         unique_together = [['map', 'layer']]
@@ -121,7 +126,7 @@ class MapFeature(models.Model):
     geom_type = models.CharField(_('geometry type'), max_length=16, null=True, blank=True)
     latitude = models.DecimalField(max_digits=10, decimal_places=7, null=True, blank=True)
     longitude = models.DecimalField(max_digits=10, decimal_places=7, null=True, blank=True)
-    data = models.JSONField(_('feature data'), null=True, blank=True)
+    data = models.JSONField(_('feature data'), null=True, blank=True, default=dict)
     visibility = models.IntegerField(_('visibility'), choices=VISIBILITY_OPTIONS, default=VIS_NONE)
     created_at = models.DateTimeField(_('date created'), auto_now_add=True)
     updated_at = models.DateTimeField(_('date updated'), auto_now=True)

@@ -168,11 +168,11 @@
 
     function getLayerStyle(layer) {
         layer_icons = {
-            "db7242d0-8897-4ec8-a196-d621d2adebd8": L.icon({
+            "14fa7d82-e64e-4624-924e-bca094c4b354": L.icon({
                 iconUrl: "/static/markers/ukraine-flag.svg",
                 iconSize: [32, 32],
             }),
-            "33b2fa68-008c-495a-83bb-ee14f3c2aa89": L.icon({
+            "099786ba-1c5b-48d2-9734-181c7749c09d": L.icon({
                 iconUrl: "/static/markers/russia-flag-circle.svg",
                 iconSize: [24, 24],
             })
@@ -195,30 +195,31 @@
         mapTitle = mapData.name
         createTitlePanel(mapTitle)
 
-        mapLayers = mapData.layers
+        mapLayers = mapData.layer_set
 
-        mapLayers.forEach((item) => {
-            let pane = map.createPane("pane_" + item.uuid)
-            pane.style.zIndex = 410 + item.priority
+        mapLayers.forEach((mapLayer) => {
+            let layer = mapLayer.layer
+            let pane = map.createPane("pane_" + mapLayer.uuid)
+            pane.style.zIndex = 450 - mapLayer.priority
             pane.style["mix-blend-mode"] = "normal"
 
-            layers[item.uuid] = new L.geoJson(item.feature_set, {
+            layers[mapLayer.uuid] = new L.geoJson(layer.feature_set, {
                 attribution: '',
                 interactive: true,
-                layerName: "layer_" + item.uuid,
-                pane: "pane_" + item.uuid,
+                layerName: "layer_" + mapLayer.uuid,
+                pane: "pane_" + mapLayer.uuid,
                 onEachFeature: featurePopup,
                 pointToLayer: function (feature, latlng) {
                     var context = {
                         feature: feature,
                         variables: {},
                     }
-                    return L.marker(latlng, getLayerStyle(item.uuid))
+                    return L.marker(latlng, getLayerStyle(mapLayer.uuid))
                 },
             })
 
-            bounds_group.addLayer(layers[item.uuid])
-            map.addLayer(layers[item.uuid])
+            bounds_group.addLayer(layers[mapLayer.uuid])
+            map.addLayer(layers[mapLayer.uuid])
         })
 
         createLayerPanel(mapLayers, getLayerStyle, false)

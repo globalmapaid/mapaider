@@ -51,13 +51,15 @@ const createSearchPanel = () => {
 
 const createLayerPanel = (mapLayers, layerStyle, collapsed = true) => {
     let baseMaps = {}
-
     let layerSet = {}
-    mapLayers.forEach((item) => {
-        const style = layerStyle(item.uuid)
+
+    mapLayers.forEach((mapLayer) => {
+        const style = layerStyle(mapLayer.uuid)
         const icon = style.icon.options.iconUrl
-        const label = '<img alt="' + item.name + '" src="' + icon + '" style="height:16px; width:16px"> ' + item.name
-        layerSet[label] = layers[item.uuid]
+
+        let layerLabel = mapLayer.layer.name
+        const label = '<img alt="' + layerLabel + '" src="' + icon + '" style="height:16px; width:16px"> ' + layerLabel
+        layerSet[label] = layers[mapLayer.uuid]
     })
 
     layerSet = {

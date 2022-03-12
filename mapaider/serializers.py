@@ -24,40 +24,43 @@ class MapFeatureSerializer(GeoFeatureModelSerializer):
 
 
 class LayerSerializer(serializers.ModelSerializer):
-    # features = MapFeatureSerializer(read_only=True, many=True)
-
-    class Meta:
-        model = Layer
-        fields = ['uuid', 'name']
-
-
-class MapLayerSerializer(serializers.ModelSerializer):
-    uuid = serializers.SerializerMethodField()
-    name = serializers.SerializerMethodField()
     feature_set = serializers.SerializerMethodField()
 
     class Meta:
-        model = MapLayer
-        fields = ['uuid', 'name', 'label', 'priority', 'feature_set']
-
-    @staticmethod
-    def get_uuid(obj):
-        return obj.layer.uuid
-
-    @staticmethod
-    def get_name(obj):
-        return obj.layer.name
+        model = Layer
+        fields = ['uuid', 'name', 'feature_set']
 
     @staticmethod
     def get_feature_set(obj):
-        return MapFeatureSerializer(obj.layer.features, many=True).data
+        return MapFeatureSerializer(obj.features, many=True).data
+
+
+class MapLayerSerializer(serializers.ModelSerializer):
+    # uuid = serializers.SerializerMethodField()
+    # name = serializers.SerializerMethodField()
+    # feature_set = serializers.SerializerMethodField()
+    layer = LayerSerializer()
+
+    class Meta:
+        model = MapLayer
+        fields = ['uuid', 'label', 'priority', 'layer']
+
+    # @staticmethod
+    # def get_uuid(obj):
+    #     return obj.layer.uuid
+    #
+    # @staticmethod
+    # def get_name(obj):
+    #     return obj.layer.name
+    #
+    # @staticmethod
+    # def get_feature_set(obj):
+    #     return MapFeatureSerializer(obj.layer.features, many=True).data
 
 
 class MapSerializer(serializers.ModelSerializer):
-    layers = MapLayerSerializer(source='maplayer_set', many=True)
+    layer_set = MapLayerSerializer(source='maplayer_set', many=True)
 
     class Meta:
         model = Map
-        # layers = LayerSerializer(many=True)
-        fields = ['uuid', 'slug', 'name', 'layers']
-        # depth = 1
+        fields = ['uuid', 'slug', 'name', 'layer_set']
