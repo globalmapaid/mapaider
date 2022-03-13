@@ -43,7 +43,7 @@ class MapLayerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MapLayer
-        fields = ['uuid', 'label', 'priority', 'layer']
+        fields = ['uuid', 'label', 'priority', 'contribution', 'layer']
 
     # @staticmethod
     # def get_uuid(obj):

@@ -6,8 +6,9 @@ from .models import Organization, Map, Layer, MapLayer, MapFeature
 
 @admin.register(MapLayer)
 class MapLayerAdmin(admin.ModelAdmin):
-    list_display = ['layer', 'map', 'priority', 'organization']
+    list_display = ['layer', 'map', 'priority', 'organization', 'contribution']
     list_filter = ['map', 'layer']
+    list_editable = ['priority', 'contribution']
     ordering = ['map', 'priority']
     readonly_fields = ['uuid']
 

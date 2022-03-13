@@ -103,6 +103,7 @@ class MapLayer(models.Model):
 
     class Meta:
         unique_together = [['map', 'layer']]
+        ordering = ['priority',]
 
     def __str__(self):
         return f'{self.map.name} - {self.layer.name}'
