@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from rest_framework_gis.serializers import GeoFeatureModelSerializer, GeoFeatureModelListSerializer
-from .models import Map, Layer, MapLayer, MapFeature
+from .models import MapProject, Layer, MapLayer, MapFeature
 
 
 class VisibleFeatureSerializer(GeoFeatureModelListSerializer):
@@ -62,5 +62,5 @@ class MapSerializer(serializers.ModelSerializer):
     layer_set = MapLayerSerializer(source='maplayer_set', many=True)
 
     class Meta:
-        model = Map
+        model = MapProject
         fields = ['uuid', 'slug', 'name', 'layer_set']

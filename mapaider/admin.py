@@ -1,18 +1,18 @@
 from django.contrib import admin
 from leaflet.admin import LeafletGeoAdmin
 
-from .models import Organization, Map, Layer, MapLayer, MapFeature
+from .models import Organization, MapProject, Layer, MapLayer, MapFeature, MapLink
 
 
 @admin.register(MapLayer)
 class MapLayerAdmin(admin.ModelAdmin):
-    list_display = ['layer', 'map', 'priority', 'organization', 'contribution']
-    list_filter = ['map', 'layer']
+    list_display = ['layer', 'map_project', 'priority', 'organization', 'contribution']
+    list_filter = ['map_project', 'layer']
     list_editable = ['priority', 'contribution']
-    ordering = ['map', 'priority']
+    ordering = ['map_project', 'priority']
     readonly_fields = ['uuid']
 
-    @admin.display(ordering='map__organization', description='Organisation')
+    @admin.display(ordering='map_project__organization', description='Organisation')
     def organization(self, obj):
         return obj.map.organization
 
@@ -34,4 +34,16 @@ class MapFeatureAdmin(LeafletGeoAdmin):
     }
 
 
-admin.site.register([Organization, Map, Layer])
+@admin.register(MapLink)
+class MapLinkAdmin(admin.ModelAdmin):
+    list_display = ['label', 'map_project', 'sort']
+    actions_on_bottom = True
+    list_editable = ['sort']
+    search_fields = ['label']
+    # readonly_fields = ['uuid']
+    list_filter = ['map_project']
+    date_hierarchy = 'created_at'
+    ordering = ['map_project', 'sort']
+
+
+admin.site.register([Organization, MapProject, Layer])

@@ -12,8 +12,8 @@ services:
 #      && python3 manage.py runserver 0.0.0.0:8000"
     volumes:
       - .:/app
-#    ports:
-#      - 8000
+    ports:
+      - "8000:8000"
     env_file:
       - .env
     restart: "on-failure"
@@ -50,6 +50,7 @@ services:
 #      - wemod-api
 
   nginx:
+    container_name: wemod-nginx
     restart: always
     depends_on:
       - wemod-api
