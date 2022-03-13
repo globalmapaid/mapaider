@@ -222,13 +222,7 @@
         })
 
         createLayerPanel(mapLayers, getLayerStyle, false)
-        createLinksPanel([
-            {label: 'Donate via DEC', url: 'https://www.dec.org.uk/appeal/ukraine-humanitarian-appeal'},
-            {label: 'Polish Rooms Map', url: 'https://www.linkedin.com/posts/jakub-zielinski-content_ukraine-stopwar-unitedwithukraine-activity-6904360265387700224-laV0'},
-            {label: 'Border Crossings Map', url: 'https://bit.ly/uaborders'},
-            {label: 'Flight Traffic Map', url: 'https://www.flightradar24.com/blog/ukraine-aviation-situation-updates/'},
-            {label: 'Housing for Refugees', url: 'https://www.ukrainetakeshelter.com/'},
-        ])
+        createLinksPanel(mapData.links)
     }
 
     const loadGeoJSON = () => {

@@ -177,6 +177,7 @@ class MapLink(models.Model):
     class Meta:
         verbose_name = 'Map Link'
         verbose_name_plural = 'Map Links'
+        ordering = ['sort']
 
     def __str__(self):
         return self.label

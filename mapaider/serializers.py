@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from rest_framework_gis.serializers import GeoFeatureModelSerializer, GeoFeatureModelListSerializer
-from .models import Map, Layer, MapLayer, MapFeature
+from .models import Map, Layer, MapLayer, MapFeature, MapLink
 
 
 class VisibleFeatureSerializer(GeoFeatureModelListSerializer):
@@ -36,31 +36,23 @@ class LayerSerializer(serializers.ModelSerializer):
 
 
 class MapLayerSerializer(serializers.ModelSerializer):
-    # uuid = serializers.SerializerMethodField()
-    # name = serializers.SerializerMethodField()
-    # feature_set = serializers.SerializerMethodField()
     layer = LayerSerializer()
 
     class Meta:
         model = MapLayer
         fields = ['uuid', 'label', 'priority', 'contribution', 'layer']
 
-    # @staticmethod
-    # def get_uuid(obj):
-    #     return obj.layer.uuid
-    #
-    # @staticmethod
-    # def get_name(obj):
-    #     return obj.layer.name
-    #
-    # @staticmethod
-    # def get_feature_set(obj):
-    #     return MapFeatureSerializer(obj.layer.features, many=True).data
+
+class MapLinkSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MapLink
+        fields = ['uuid', 'label', 'url', 'sort']
 
 
 class MapSerializer(serializers.ModelSerializer):
-    layer_set = MapLayerSerializer(source='maplayer_set', many=True)
+    layer_set = MapLayerSerializer(source='maplayer_set', many=True, read_only=True)
+    links = MapLinkSerializer(many=True, read_only=True)
 
     class Meta:
         model = Map
-        fields = ['uuid', 'slug', 'name', 'layer_set']
+        fields = ['uuid', 'slug', 'name', 'links', 'layer_set']
