@@ -132,7 +132,7 @@
             minNativeZoom: 0,
             maxNativeZoom: 18,
         }
-    )
+    ).addTo(map)
     map.addLayer(layer_StreetMap)
 
     L.ImageOverlay.include({
@@ -140,7 +140,6 @@
             return this._bounds
         },
     })
-
 
     function featurePopup(feature, layer) {
         popupContent = `

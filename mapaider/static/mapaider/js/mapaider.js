@@ -52,10 +52,7 @@ const createSearchPanel = () => {
 const createLayerPanel = (mapLayers, layerStyle, collapsed = true) => {
     let baseMaps = {
     }
-    let overlayMaps = {
-        'Street Map': layer_StreetMap,
-        'Satellite': layer_SatelliteMap,
-    }
+    let overlayMaps = {}
 
     mapLayers.forEach((mapLayer) => {
         const style = layerStyle(mapLayer.uuid)
@@ -65,6 +62,12 @@ const createLayerPanel = (mapLayers, layerStyle, collapsed = true) => {
         const label = '<img alt="' + layerLabel + '" src="' + icon + '" style="height:16px; width:16px"> ' + layerLabel
         overlayMaps[label] = layers[mapLayer.uuid]
     })
+
+    overlayMaps = {
+        ...overlayMaps,
+        'Street Map': layer_StreetMap,
+        'Satellite Map': layer_SatelliteMap,
+    }
 
     L.control.layers(baseMaps, overlayMaps, {collapsed: collapsed}).addTo(map)
 
