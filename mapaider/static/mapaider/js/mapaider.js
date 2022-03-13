@@ -21,7 +21,7 @@ const createLinksPanel = (links = []) => {
         return this._div
     }
     linksPanel.update = function () {
-        let panelContent = '<strong>Related Links</strong>'
+        let panelContent = '<strong>How about</strong>'
         links.forEach((item) => {
             panelContent += `
 <div>
