@@ -42,7 +42,7 @@
         }
 
         .leaflet-control-container .info h2 {
-            font-size: 1rem;
+            font-size: 1.25rem;
             font-weight: bold;
         }
     </style>
@@ -189,15 +189,14 @@
     }
 
     const buildMap = (mapData) => {
-        // Put the search panel
-        createSearchPanel()
-
         // Put the map title
         mapTitle = mapData.name
         createTitlePanel(mapTitle)
 
-        mapLayers = mapData.layer_set
+        // Put the search panel
+        createSearchPanel()
 
+        mapLayers = mapData.layer_set
         mapLayers.forEach((mapLayer) => {
             let layer = mapLayer.layer
             let pane = map.createPane("pane_" + mapLayer.uuid)

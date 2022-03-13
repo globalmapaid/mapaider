@@ -1,5 +1,5 @@
 const createTitlePanel = (mapTitle) => {
-    var title = new L.Control()
+    var title = new L.Control({position: 'bottomleft'})
 
     title.onAdd = function (map) {
         this._div = L.DomUtil.create("div", "info")
@@ -13,7 +13,7 @@ const createTitlePanel = (mapTitle) => {
 }
 
 const createLinksPanel = (links = []) => {
-    var linksPanel = new L.Control()
+    var linksPanel = new L.Control({position: 'bottomright'})
 
     linksPanel.onAdd = function (map) {
         this._div = L.DomUtil.create("div", "info")
