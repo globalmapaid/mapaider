@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.views.decorators.clickjacking import xframe_options_exempt
 from rest_framework.generics import RetrieveAPIView
 
-from .models import MapProject, Layer, MapFeature
+from .models import Map, Layer, MapFeature
 from .serializers import MapSerializer, LayerSerializer
 
 
@@ -12,7 +12,7 @@ class MapAPIView(RetrieveAPIView):
     lookup_field = 'uuid'
 
     def get_queryset(self):
-        return MapProject.objects.prefetch_related('layers').prefetch_related(
+        return Map.objects.prefetch_related('layers').prefetch_related(
             'layers__features')
 
 

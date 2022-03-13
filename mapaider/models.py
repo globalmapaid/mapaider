@@ -33,7 +33,7 @@ class Organization(models.Model):
         return super().save(*args, **kwargs)
 
 
-class MapProject(models.Model):
+class Map(models.Model):
     uuid = models.UUIDField(_('uuid'), db_index=True, default=uuid.uuid4, editable=False)
     organization = models.ForeignKey('Organization', on_delete=models.CASCADE)
     name = models.CharField(_('map name'), max_length=80)
@@ -90,7 +90,7 @@ class Layer(models.Model):
 
 class MapLayer(models.Model):
     uuid = models.UUIDField(db_index=True, default=uuid.uuid4, editable=False)
-    map_project = models.ForeignKey('MapProject', on_delete=models.CASCADE)
+    map = models.ForeignKey('Map', on_delete=models.CASCADE)
     layer = models.ForeignKey('Layer', on_delete=models.CASCADE)
     label = models.CharField(
         _('layer title'),
@@ -104,11 +104,11 @@ class MapLayer(models.Model):
     class Meta:
         verbose_name = 'Map Layer'
         verbose_name_plural = 'Map Layers'
-        unique_together = [['map_project', 'layer']]
+        unique_together = [['map', 'layer']]
         ordering = ['priority', ]
 
     def __str__(self):
-        return f'{self.map_project.name} - {self.layer.name}'
+        return f'{self.map.name} - {self.layer.name}'
 
 
 class MapFeature(models.Model):
@@ -166,7 +166,7 @@ class MapFeature(models.Model):
 
 class MapLink(models.Model):
     uuid = models.UUIDField(db_index=True, default=uuid.uuid4, editable=False)
-    map_project = models.ForeignKey('MapProject', related_name='links', on_delete=models.CASCADE)
+    map = models.ForeignKey('Map', related_name='links', on_delete=models.CASCADE)
     label = models.CharField(_('link label'), max_length=120)
     url = models.URLField(_('link url'))
     sort = models.IntegerField(default=0)
