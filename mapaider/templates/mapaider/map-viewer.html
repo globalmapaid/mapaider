@@ -165,6 +165,8 @@
             popupContent += `<tr><th scope="row">Value</th><td>: ${feature.properties.feature_data.value}</td></tr>`
         if (feature.properties.feature_data.seized != null)
             popupContent += `<tr><th scope="row">Seized</th><td>: ${feature.properties.feature_data.seized}</td></tr>`
+        if (feature.properties.feature_data.tracking != null)
+            popupContent += `<tr><th scope="row">Tracking</th><td>: <a href="${feature.properties.feature_data.tracking}" target="_blank">Click here</a></td></tr>`
 
 
         popupContent += `</table>`
