@@ -23,7 +23,7 @@ class MapFeatureAdmin(LeafletGeoAdmin):
     actions_on_bottom = True
     list_editable = ['visibility']
     search_fields = ['name']
-    readonly_fields = ['uuid', 'geom_type', 'latitude', 'longitude']
+    readonly_fields = ['uuid', 'geom_type']
     list_filter = ['layer', 'geom_type', 'visibility', 'created_at']
     date_hierarchy = 'created_at'
     ordering = ['-created_at']
@@ -32,6 +32,11 @@ class MapFeatureAdmin(LeafletGeoAdmin):
         'MIN_ZOOM': 3,
         'MAX_ZOOM': 19,
     }
+
+    # def get_readonly_fields(self, request, obj=None):
+    #     if obj: # editing an existing object
+    #         return self.readonly_fields + ['latitude', 'longitude']
+    #     return self.readonly_fields
 
 
 @admin.register(MapLink)

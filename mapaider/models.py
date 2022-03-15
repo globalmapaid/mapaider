@@ -125,7 +125,7 @@ class MapFeature(models.Model):
     uuid = models.UUIDField(db_index=True, default=uuid.uuid4, editable=False)
     layer = models.ForeignKey('Layer', related_name='features', on_delete=models.CASCADE)
     name = models.CharField(_('feature name'), max_length=80)
-    geom = models.GeometryField(_('geometry'), srid=4326, null=True, geography=True)
+    geom = models.GeometryField(_('geometry'), srid=4326, null=True, geography=True, blank=True)
     geom_type = models.CharField(_('geometry type'), max_length=16, null=True, blank=True)
     latitude = models.DecimalField(max_digits=10, decimal_places=7, null=True, blank=True)
     longitude = models.DecimalField(max_digits=10, decimal_places=7, null=True, blank=True)
@@ -158,9 +158,13 @@ class MapFeature(models.Model):
             centroid = geom.centroid
 
             (self.longitude, self.latitude) = centroid.coords
+        elif self.latitude is not None and self.longitude is not None:
+            self.geom = Point(float(self.longitude), float(self.latitude))
+            self.geom_type = self.geom.geom_type
         else:
-            self.longitude = None
             self.latitude = None
+            self.longitude = None
+
         return super().save(*args, **kwargs)
 
 
