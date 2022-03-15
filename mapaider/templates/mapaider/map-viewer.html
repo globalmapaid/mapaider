@@ -159,6 +159,12 @@
             popupContent += `<tr><th scope="row">Headquarter</th><td>: ${feature.properties.feature_data.hq}</td></tr>`
         if (feature.properties.feature_data.address != null)
             popupContent += `<tr><th scope="row">Location</th><td>: ${feature.properties.feature_data.address}</td></tr>`
+        if (feature.properties.feature_data.owner != null)
+            popupContent += `<tr><th scope="row">Owner</th><td>: ${feature.properties.feature_data.owner}</td></tr>`
+        if (feature.properties.feature_data.value != null)
+            popupContent += `<tr><th scope="row">Value</th><td>: ${feature.properties.feature_data.value}</td></tr>`
+        if (feature.properties.feature_data.seized != null)
+            popupContent += `<tr><th scope="row">Seized</th><td>: ${feature.properties.feature_data.seized}</td></tr>`
 
 
         popupContent += `</table>`
