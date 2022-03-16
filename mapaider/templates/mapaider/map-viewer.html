@@ -238,7 +238,8 @@
     }
 
     const loadGeoJSON = () => {
-        axios.get("/api/mapaider/map/cff37635-2947-4d3a-a9de-570e18e3097a").then((response) => {
+        slug = "{{ slug }}"
+        axios.get("/api/mapaider/map/" + slug).then((response) => {
             buildMap(response.data)
         })
     }
