@@ -17,6 +17,12 @@ class MapLayerAdmin(admin.ModelAdmin):
         return obj.map.organization
 
 
+@admin.register(Layer)
+class MapLayerAdmin(admin.ModelAdmin):
+    list_display = ['name', 'organization', 'contribution']
+    list_editable = ['contribution']
+
+
 @admin.register(MapFeature)
 class MapFeatureAdmin(LeafletGeoAdmin):
     list_display = ['name', 'layer', 'geom_type', 'visibility']
@@ -51,4 +57,4 @@ class MapLinkAdmin(admin.ModelAdmin):
     ordering = ['map', 'sort']
 
 
-admin.site.register([Organization, Map, Layer])
+admin.site.register([Organization, Map])

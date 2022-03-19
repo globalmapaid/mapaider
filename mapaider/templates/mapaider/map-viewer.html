@@ -45,6 +45,10 @@
             font-size: 1.25rem;
             font-weight: bold;
         }
+
+        .mapaider-feature-tooltip {
+            background-color: white;
+        }
     </style>
 
     <title>MapAider - Map Viewer</title>
@@ -116,7 +120,7 @@
         minNativeZoom: 0,
         maxNativeZoom: 18,
     })
-    .addTo(map)
+        .addTo(map)
     map.addLayer(layer_SatelliteMap);
 
     map.createPane("pane_StreetMap")
@@ -228,6 +232,15 @@
                     return L.marker(latlng, getLayerStyle(mapLayer.uuid))
                 },
             })
+
+            let tooltipOptions = {
+                sticky: true,
+                className: 'mapaider-feature-tooltip'
+            }
+
+            layers[mapLayer.uuid].bindTooltip(function (feature) {
+                return feature.feature.properties.name
+            }, tooltipOptions)
 
             bounds_group.addLayer(layers[mapLayer.uuid])
             map.addLayer(layers[mapLayer.uuid])
