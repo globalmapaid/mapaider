@@ -68,6 +68,7 @@ class Layer(models.Model):
     uuid = models.UUIDField(db_index=True, default=uuid.uuid4, editable=False)
     organization = models.ForeignKey('Organization', on_delete=models.CASCADE)
     name = models.CharField(_('layer name'), max_length=80)
+    data_fields = models.JSONField('_data fields', null=True, blank=True, default=dict)
     is_active = models.BooleanField(
         _('active'),
         default=True,

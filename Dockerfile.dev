@@ -1,4 +1,4 @@
-FROM python:3.10-slim-buster
+FROM python:buster
 
 # set our working directory inside the container (when it's finally created from this image)
 # depending on your environment you may need to
@@ -16,13 +16,16 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 # install psycopg2 dependencies
-RUN apt-get update \
-   && apt-get -y install netcat gcc postgresql \
-   && apt-get clean
+RUN apt update \
+   && apt -y install netcat gcc postgresql \
+   && apt clean
 
 # Setup GDAL
 RUN apt update -y &&\
    apt install -y make binutils libproj-dev gdal-bin python-gdal python3-gdal net-tools build-essential libpq-dev
+
+RUN curl -fsSL https://deb.nodesource.com/setup_17.x | bash -
+RUN apt-get install -y nodejs
 
 # upgrade pip version
 RUN pip install --upgrade pip
@@ -34,3 +37,9 @@ RUN pip install -r requirements.txt
 
 # Copy over the project
 COPY . /app
+
+WORKDIR /app/jstoolbox
+RUN npm install -y
+RUN npm run prod
+
+WORKDIR /app

@@ -9,6 +9,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes"/>
 
     <link rel="icon" href="{% static 'images/webicon.png' %}"/>
+    <link rel="stylesheet" href="{% static 'css/tailwind-compiled.css' %}"/>
     <link rel="stylesheet" href="{% static 'mapaider/css/leaflet.css' %}"/>
     <link rel="stylesheet" href="/static/css/qgis2web.css"/>
     <link rel="stylesheet" href="/static/css/fontawesome-all.min.css"/>
@@ -16,13 +17,6 @@
     <link rel="stylesheet" href="/static/css/MarkerCluster.Default.css"/>
     <link rel="stylesheet" href="/static/css/leaflet-control-geocoder.Geocoder.css"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.css"/>
-
-    <link
-            rel="stylesheet"
-            href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-            integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
-            crossorigin="anonymous"
-    />
 
     <style>
         html,
@@ -33,6 +27,11 @@
             padding: 0;
             margin: 0;
         }
+
+        .leaflet-marker-icon {
+            max-width: none;
+        }
+
 
         .area-tooltip {
             background: #363636;
@@ -57,22 +56,6 @@
 
     <title>MapAider - Map Viewer</title>
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.2/dist/alpine.min.js" defer></script>
-    <script
-            src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-            crossorigin="anonymous"
-    ></script>
-    <script
-            src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-            crossorigin="anonymous"
-    ></script>
-    <script
-            src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-            crossorigin="anonymous"
-    ></script>
-    <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
@@ -239,7 +222,7 @@
 
             let tooltipOptions = {
                 sticky: true,
-                className: 'mapaider-feature-tooltip'
+                className: 'mapaider-feature-tooltip bg-red-400'
             }
 
             layers[mapLayer.uuid].bindTooltip(function (feature) {

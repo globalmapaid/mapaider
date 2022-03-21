@@ -1,4 +1,5 @@
 node_nodules/
+jstoolbox/node_modules
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -143,3 +144,4 @@ cython_debug/
 .idea
 /static/data
 /staticfiles
+/static/css/tailwind-compiled.css

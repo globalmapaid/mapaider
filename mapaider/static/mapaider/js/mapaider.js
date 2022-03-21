@@ -16,7 +16,7 @@ const createLinksPanel = (links = []) => {
     var linksPanel = new L.Control({position: 'bottomright'})
 
     linksPanel.onAdd = function (map) {
-        this._div = L.DomUtil.create("div", "info")
+        this._div = L.DomUtil.create("div", "bg-white p-2 rounded-md")
         this.update()
         return this._div
     }
@@ -25,7 +25,7 @@ const createLinksPanel = (links = []) => {
         links.forEach((item) => {
             panelContent += `
 <div>
-<a href='${item.url}' target='_blank'>
+<a href='${item.url}' target='_blank' class="hover:text-orange-500">
 ${item.label}
 </a>
 </div>`
@@ -59,7 +59,7 @@ const createLayerPanel = (mapLayers, layerStyle, collapsed = true) => {
         const icon = style.icon.options.iconUrl
 
         let layerLabel = mapLayer.layer.name
-        const label = '<img alt="' + layerLabel + '" src="' + icon + '" style="height:16px; width:16px"> ' + layerLabel
+        const label = '<img alt="' + layerLabel + '" src="' + icon + '" class="inline" style="height:16px; width:16px"> ' + layerLabel
         overlayMaps[label] = layers[mapLayer.uuid]
     })
 
