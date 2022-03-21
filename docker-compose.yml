@@ -7,7 +7,8 @@ services:
       dockerfile: Dockerfile.dev
     container_name: wemod-api
     command: >
-      sh -c "python3 manage.py collectstatic --noinput
+      sh -c "cd jstoolbox && npm install -y && npm run prod && cd ..
+      && python3 manage.py collectstatic --noinput
       && gunicorn wemod_api.wsgi:application --bind 0.0.0.0:8000"
 #      && python3 manage.py runserver 0.0.0.0:8000"
     volumes:
