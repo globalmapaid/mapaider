@@ -35,11 +35,5 @@ COPY ./requirements.txt /app/requirements.txt
 
 RUN pip install -r requirements.txt
 
-WORKDIR /app/jstoolbox
-RUN npm install -y
-RUN npm run prod
-
-WORKDIR /app
-
 # Copy over the project
 COPY . /app
