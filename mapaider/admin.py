@@ -18,9 +18,13 @@ class MapLayerAdmin(admin.ModelAdmin):
 
 
 @admin.register(Layer)
-class MapLayerAdmin(admin.ModelAdmin):
-    list_display = ['name', 'organization', 'contribution']
+class LayerAdmin(admin.ModelAdmin):
+    list_display = ['name', 'organization', 'extra_fields', 'contribution']
     list_editable = ['contribution']
+
+    @admin.display(description='Data Fields')
+    def extra_fields(self, obj):
+        return len(obj.field_set)
 
 
 @admin.register(MapFeature)

@@ -154,6 +154,7 @@ REST_FRAMEWORK = {
 CSRF_TRUSTED_ORIGINS = ['https://*.globalmapaid.org']
 CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOWED_ORIGINS = [
+    'https://mapaider.globalmapaid.org',
     'http://localhost:3000'
 ]
 

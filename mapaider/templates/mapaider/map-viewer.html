@@ -132,37 +132,36 @@
         },
     })
 
-    function featurePopup(feature, layer) {
-        popupContent = `
-            <table>
-                <tr>
-                    <th scope="row">Name </th>
-                    <td>: ${feature.properties.name}</td>
-                </tr>`
+    function featurePopup(mapLayer) {
+        return function(feature, layer) {
+            let fieldSet = mapLayer.layer['field_set']
 
-        if (feature.properties.feature_data.business != null)
-            popupContent += `<tr><th scope="row">Business</th><td>: ${feature.properties.feature_data.business}</td></tr>`
-        if (feature.properties.feature_data.sector != null)
-            popupContent += `<tr><th scope="row">Sector</th><td>: ${feature.properties.feature_data.sector}</td></tr>`
-        if (feature.properties.feature_data.sanction != null)
-            popupContent += `<tr><th scope="row">Nature of Sanction</th><td>: ${feature.properties.feature_data.sanction}</td></tr>`
-        if (feature.properties.feature_data.hq != null)
-            popupContent += `<tr><th scope="row">Headquarter</th><td>: ${feature.properties.feature_data.hq}</td></tr>`
-        if (feature.properties.feature_data.address != null)
-            popupContent += `<tr><th scope="row">Location</th><td>: ${feature.properties.feature_data.address}</td></tr>`
-        if (feature.properties.feature_data.owner != null)
-            popupContent += `<tr><th scope="row">Owner</th><td>: ${feature.properties.feature_data.owner}</td></tr>`
-        if (feature.properties.feature_data.value != null)
-            popupContent += `<tr><th scope="row">Value</th><td>: ${feature.properties.feature_data.value}</td></tr>`
-        if (feature.properties.feature_data.seized != null)
-            popupContent += `<tr><th scope="row">Seized</th><td>: ${feature.properties.feature_data.seized}</td></tr>`
-        if (feature.properties.feature_data.tracking != null)
-            popupContent += `<tr><th scope="row">Tracking</th><td>: <a href="${feature.properties.feature_data.tracking}" target="_blank">Click here</a></td></tr>`
+            let popupContent = `
+                <table>
+                    <tr>
+                        <th scope="row">Name </th>
+                        <td>: ${feature.properties.name}</td>
+                    </tr>`
 
+            fieldSet.forEach(f => {
+                if (feature.properties.feature_data[f.field] != null) {
+                    let fieldTitle = f.title
+                    let fieldValue = ''
 
-        popupContent += `</table>`
+                    if (f.type === 'url') {
+                        fieldValue = `<a href="${feature.properties.feature_data[f.field]}" target="_blank">Click here</a>`
+                    } else {
+                        fieldValue = feature.properties.feature_data[f.field]
+                    }
 
-        layer.bindPopup(popupContent, {maxHeight: 400})
+                    popupContent += `<tr><th scope="row">${fieldTitle}</th><td>: ${fieldValue}</td></tr>`
+                }
+            })
+
+            popupContent += `</table>`
+
+            layer.bindPopup(popupContent, {maxHeight: 400})
+        }
     }
 
     function getLayerStyle(layer) {
@@ -210,7 +209,7 @@
                 interactive: true,
                 layerName: "layer_" + mapLayer.uuid,
                 pane: "pane_" + mapLayer.uuid,
-                onEachFeature: featurePopup,
+                onEachFeature: featurePopup(mapLayer),
                 pointToLayer: function (feature, latlng) {
                     var context = {
                         feature: feature,
