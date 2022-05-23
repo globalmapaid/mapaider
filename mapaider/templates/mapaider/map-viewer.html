@@ -139,7 +139,7 @@
             let popupContent = `
                 <table>
                     <tr>
-                        <th scope="row">Name </th>
+                        <th scope="row" class="pr-4">Name </th>
                         <td>: ${feature.properties.name}</td>
                     </tr>`
 
@@ -165,7 +165,12 @@
     }
 
     function getLayerStyle(layer) {
-        layer_icons = {
+        const default_icon = L.icon({
+                iconUrl: "/static/markers/default-marker.svg",
+                iconSize: [24, 24],
+            })
+
+        const layer_icons = {
             "14fa7d82-e64e-4624-924e-bca094c4b354": L.icon({
                 iconUrl: "/static/markers/ukraine-flag.svg",
                 iconSize: [32, 32],
@@ -180,11 +185,13 @@
             })
         }
 
+        const icon = layer_icons[layer] || default_icon
+
         return {
             pane: "pane_" + layer,
             rotationAngle: 0.0,
             rotationOrigin: "center center",
-            icon: layer_icons[layer],
+            icon: icon,
             interactive: true,
         }
     }

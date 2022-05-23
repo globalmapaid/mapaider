@@ -13,26 +13,28 @@ const createTitlePanel = (mapTitle) => {
 }
 
 const createLinksPanel = (links = []) => {
-    var linksPanel = new L.Control({position: 'bottomright'})
+    if (links.length > 0) {
+        var linksPanel = new L.Control({position: 'bottomright'})
 
-    linksPanel.onAdd = function (map) {
-        this._div = L.DomUtil.create("div", "bg-white p-2 rounded-md")
-        this.update()
-        return this._div
-    }
-    linksPanel.update = function () {
-        let panelContent = '<strong>How about</strong>'
-        links.forEach((item) => {
-            panelContent += `
+        linksPanel.onAdd = function (map) {
+            this._div = L.DomUtil.create("div", "bg-white p-2 rounded-md")
+            this.update()
+            return this._div
+        }
+        linksPanel.update = function () {
+            let panelContent = '<strong>How about</strong>'
+            links.forEach((item) => {
+                panelContent += `
 <div>
 <a href='${item.url}' target='_blank' class="hover:text-orange-500">
 ${item.label}
 </a>
 </div>`
-        })
-        this._div.innerHTML = panelContent
+            })
+            this._div.innerHTML = panelContent
+        }
+        linksPanel.addTo(map)
     }
-    linksPanel.addTo(map)
 }
 
 const createSearchPanel = () => {
@@ -50,8 +52,7 @@ const createSearchPanel = () => {
 }
 
 const createLayerPanel = (mapLayers, layerStyle, collapsed = true) => {
-    let baseMaps = {
-    }
+    let baseMaps = {}
     let overlayMaps = {}
 
     mapLayers.forEach((mapLayer) => {
