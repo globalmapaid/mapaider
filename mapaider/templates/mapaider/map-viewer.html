@@ -139,7 +139,7 @@
             let popupContent = `
                 <table>
                     <tr>
-                        <th scope="row" class="pr-4">Name </th>
+                        <th scope="row" class="pr-4 whitespace-nowrap">Name </th>
                         <td>${feature.properties.name}</td>
                     </tr>`
 
@@ -154,7 +154,7 @@
                         fieldValue = feature.properties.feature_data[f.field]
                     }
 
-                    popupContent += `<tr><th scope="row" class="pr-4">${fieldTitle}</th><td>${fieldValue}</td></tr>`
+                    popupContent += `<tr><th scope="row" class="pr-4 whitespace-nowrap">${fieldTitle}</th><td>${fieldValue}</td></tr>`
                 }
             })
 
