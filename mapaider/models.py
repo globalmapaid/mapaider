@@ -125,7 +125,7 @@ class MapFeature(models.Model):
 
     uuid = models.UUIDField(db_index=True, default=uuid.uuid4, editable=False)
     layer = models.ForeignKey('Layer', related_name='features', on_delete=models.CASCADE)
-    name = models.CharField(_('feature name'), max_length=80)
+    name = models.CharField(_('feature name'), max_length=200)
     geom = models.GeometryField(_('geometry'), srid=4326, null=True, geography=True, blank=True)
     geom_type = models.CharField(_('geometry type'), max_length=16, null=True, blank=True)
     latitude = models.DecimalField(max_digits=10, decimal_places=7, null=True, blank=True)
@@ -165,6 +165,7 @@ class MapFeature(models.Model):
         else:
             self.latitude = None
             self.longitude = None
+            self.geom_type = None
 
         return super().save(*args, **kwargs)
 
