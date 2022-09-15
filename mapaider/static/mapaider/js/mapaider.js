@@ -51,8 +51,7 @@ const createSearchPanel = () => {
         "Search for a place"
 }
 
-const createLayerPanel = (mapLayers, layerStyle, collapsed = true) => {
-    let baseMaps = {}
+const createLayerPanel = (baseMaps, mapLayers, layerStyle, collapsed = true) => {
     let overlayMaps = {}
 
     mapLayers.forEach((mapLayer) => {
@@ -66,8 +65,8 @@ const createLayerPanel = (mapLayers, layerStyle, collapsed = true) => {
 
     overlayMaps = {
         ...overlayMaps,
-        'Street Map': layer_StreetMap,
-        'Satellite Map': layer_SatelliteMap,
+        //'Street Map': layer_StreetMap,
+        //'Satellite Map': layer_SatelliteMap,
     }
 
     L.control.layers(baseMaps, overlayMaps, {collapsed: collapsed}).addTo(map)

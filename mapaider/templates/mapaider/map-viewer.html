@@ -50,7 +50,9 @@
         }
 
         @media (hover: none) {
-            .mapaider-feature-tooltip { display: none; }
+            .mapaider-feature-tooltip {
+                display: none;
+            }
         }
     </style>
 
@@ -87,7 +89,7 @@
     var hash = new L.Hash(map)
 
     map.attributionControl.setPrefix(
-        'Mapaider &middot; Powered by <a href="https://www.globalmapaid.org/ukraine-russia-conflict/" target="_blank">MapAid</a>'
+        'Mapaider &middot; Powered by <a href="https://www.globalmapaid.org" target="_blank">MapAid</a>'
     )
 
     var autolinker = new Autolinker({
@@ -96,35 +98,18 @@
 
     var bounds_group = new L.featureGroup([])
 
-    map.createPane("pane_SatelliteMap")
-    //map.getPane("pane_SatelliteMap").style.zIndex = 200;
-    var layer_SatelliteMap = L.tileLayer("https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}", {
-        pane: "pane_SatelliteMap",
-        opacity: 1,
-        attribution: "",
-        minZoom: 1,
-        maxZoom: 28,
-        minNativeZoom: 0,
-        maxNativeZoom: 18,
-    })
-        .addTo(map)
-    map.addLayer(layer_SatelliteMap);
 
-    map.createPane("pane_StreetMap")
-    //map.getPane("pane_StreetMap").style.zIndex = 201;
-    var layer_StreetMap = L.tileLayer(
-        "https://maps.googleapis.com/maps/vt?pb=!1m5!1m4!1i{z}!2i{x}!3i{y}!4i256!2m3!1e0!2sm!3i512225992!3m17!2sen!3sUS!5e18!12m4!1e68!2m2!1sset!2sRoadmap!12m3!1e37!2m1!1ssmartmaps!12m4!1e26!2m2!1sstyles!2zcy50OjV8cC5oOiNGRkJCMDB8cC5zOjQzLjQwMDAwMDAwMDAwMDAwNnxwLmw6MzcuNTk5OTk5OTk5OTk5OTk0fHAuZzoxLHMudDo0OXxwLmg6I0ZGQzIwMHxwLnM6LTYxLjh8cC5sOjQ1LjU5OTk5OTk5OTk5OTk5NHxwLmc6MSxzLnQ6NTB8cC5oOiNGRjAzMDB8cC5zOi0xMDB8cC5sOjUxLjE5OTk5OTk5OTk5OTk5fHAuZzoxLHMudDo1MXxwLmg6I0ZGMDMwMHxwLnM6LTEwMHxwLmw6NTJ8cC5nOjEscy50OjZ8cC5oOiMwMDc4RkZ8cC5zOi0xMy4yMDAwMDAwMDAwMDAwMDN8cC5sOjIuNDAwMDAwMDAwMDAwMDA1N3xwLmc6MSxzLnQ6MnxwLmg6IzAwRkY2QXxwLnM6LTEuMDk4OTAxMDk4OTAxMTIzNHxwLmw6MTEuMjAwMDAwMDAwMDAwMDE3fHAuZzox!4e0&key=AIzaSyAOqYYyBbtXQEtcHG7hwAwyCPQSYidG8yU&token=14219",
-        {
-            pane: "pane_StreetMap",
-            opacity: 0.7,
+    //map.getPane("pane_SatelliteMap").style.zIndex = 200;
+    {% comment %}    var layer_SatelliteMap = L.tileLayer("https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}", {
             attribution: "",
+            pane: "pane_SatelliteMap",
+            opacity: 1,
             minZoom: 1,
             maxZoom: 28,
             minNativeZoom: 0,
             maxNativeZoom: 18,
-        }
-    ).addTo(map)
-    map.addLayer(layer_StreetMap)
+        }).addTo(map){% endcomment %}
+
 
     L.ImageOverlay.include({
         getBounds: function () {
@@ -133,7 +118,7 @@
     })
 
     function featurePopup(mapLayer) {
-        return function(feature, layer) {
+        return function (feature, layer) {
             let fieldSet = mapLayer.layer['field_set']
 
             let popupContent = `
@@ -166,9 +151,9 @@
 
     function getLayerStyle(layer) {
         const default_icon = L.icon({
-                iconUrl: "/static/markers/default-marker.svg",
-                iconSize: [24, 24],
-            })
+            iconUrl: "/static/markers/default-marker.svg",
+            iconSize: [24, 24],
+        })
 
         const layer_icons = {
             "14fa7d82-e64e-4624-924e-bca094c4b354": L.icon({
@@ -197,6 +182,40 @@
     }
 
     const buildMap = (mapData) => {
+        // Base Maps
+        let baseMaps = {}
+        map.createPane("pane_SatelliteMap")
+        var layer_SatelliteMap = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+            pane: "pane_SatelliteMap",
+            opacity: 1,
+            minZoom: 1,
+            maxZoom: 28,
+            minNativeZoom: 0,
+            maxNativeZoom: 18,
+        }).addTo(map);
+        map.addLayer(layer_SatelliteMap);
+        baseMaps['Base Map'] = layer_SatelliteMap
+
+        if (mapData.name !== 'River of Flowers') {
+            map.createPane("pane_StreetMap")
+            //map.getPane("pane_StreetMap").style.zIndex = 201;
+            var layer_StreetMap = L.tileLayer(
+                "https://maps.googleapis.com/maps/vt?pb=!1m5!1m4!1i{z}!2i{x}!3i{y}!4i256!2m3!1e0!2sm!3i512225992!3m17!2sen!3sUS!5e18!12m4!1e68!2m2!1sset!2sRoadmap!12m3!1e37!2m1!1ssmartmaps!12m4!1e26!2m2!1sstyles!2zcy50OjV8cC5oOiNGRkJCMDB8cC5zOjQzLjQwMDAwMDAwMDAwMDAwNnxwLmw6MzcuNTk5OTk5OTk5OTk5OTk0fHAuZzoxLHMudDo0OXxwLmg6I0ZGQzIwMHxwLnM6LTYxLjh8cC5sOjQ1LjU5OTk5OTk5OTk5OTk5NHxwLmc6MSxzLnQ6NTB8cC5oOiNGRjAzMDB8cC5zOi0xMDB8cC5sOjUxLjE5OTk5OTk5OTk5OTk5fHAuZzoxLHMudDo1MXxwLmg6I0ZGMDMwMHxwLnM6LTEwMHxwLmw6NTJ8cC5nOjEscy50OjZ8cC5oOiMwMDc4RkZ8cC5zOi0xMy4yMDAwMDAwMDAwMDAwMDN8cC5sOjIuNDAwMDAwMDAwMDAwMDA1N3xwLmc6MSxzLnQ6MnxwLmg6IzAwRkY2QXxwLnM6LTEuMDk4OTAxMDk4OTAxMTIzNHxwLmw6MTEuMjAwMDAwMDAwMDAwMDE3fHAuZzox!4e0&key=AIzaSyAOqYYyBbtXQEtcHG7hwAwyCPQSYidG8yU&token=14219",
+                {
+                    pane: "pane_StreetMap",
+                    opacity: 0.7,
+                    attribution: "",
+                    minZoom: 1,
+                    maxZoom: 28,
+                    minNativeZoom: 0,
+                    maxNativeZoom: 18,
+                }
+            ).addTo(map)
+            map.addLayer(layer_StreetMap)
+            baseMaps['Street Map'] = layer_StreetMap
+        }
+
         // Put the map title
         mapTitle = mapData.name
         createTitlePanel(mapTitle)
@@ -239,7 +258,7 @@
             map.addLayer(layers[mapLayer.uuid])
         })
 
-        createLayerPanel(mapLayers, getLayerStyle, false)
+        createLayerPanel(baseMaps, mapLayers, getLayerStyle, false)
         createLinksPanel(mapData.links)
     }
 
