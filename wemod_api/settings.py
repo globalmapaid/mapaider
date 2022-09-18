@@ -151,12 +151,9 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',),
 }
 
-CSRF_TRUSTED_ORIGINS = ['https://*.globalmapaid.org']
-CORS_ALLOW_ALL_ORIGINS = False
-CORS_ALLOWED_ORIGINS = [
-    'https://mapaider.globalmapaid.org',
-    'http://localhost:3000'
-]
+CSRF_TRUSTED_ORIGINS = env('CSRF_TRUSTED_ORIGINS').split(',')
+CORS_ALLOW_ALL_ORIGINS = env('CORS_ALLOW_ALL_ORIGINS')
+CORS_ALLOWED_ORIGINS = env('CORS_ALLOWED_ORIGINS').split(',')
 
 LEAFLET_CONFIG = {
     'DEFAULT_CENTER': (51.475, 0),  # Greenwich,

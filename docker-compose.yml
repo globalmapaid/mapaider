@@ -21,7 +21,7 @@ services:
     depends_on:
       - wemod-db
     networks:
-      - wemod-api
+      - wemod-net
 
   wemod-db:
     image: kartoza/postgis:13.0
@@ -36,7 +36,7 @@ services:
       - POSTGRES_DB=${POSTGRES_DB}
     restart: "on-failure"
     networks:
-      - wemod-api
+      - wemod-net
 #  client:
 #    build:
 #      context: ./client
@@ -61,10 +61,10 @@ services:
     ports:
       - "8090:80"
     networks:
-      - wemod-api
+      - wemod-net
 
 networks:
-  wemod-api:
+  wemod-net:
     driver: bridge
 
 volumes:
