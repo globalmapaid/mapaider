@@ -48,6 +48,7 @@ services:
     volumes:
       #- ./app/node_modules
       - ./ui:/app
+    stdin_open: true
     depends_on:
       - wemod-api
     networks:
