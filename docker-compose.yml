@@ -44,7 +44,7 @@ services:
       dockerfile: Dockerfile.dev
     container_name: wemod-ui
     volumes:
-      - ./app/node_modules
+      - /app/node_modules
       - ./ui:/app
     stdin_open: true
     depends_on:
