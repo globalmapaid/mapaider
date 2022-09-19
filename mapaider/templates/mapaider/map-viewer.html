@@ -11,11 +11,11 @@
     <link rel="icon" href="{% static 'images/webicon.png' %}"/>
     <link rel="stylesheet" href="{% static 'css/tailwind-compiled.css' %}"/>
     <link rel="stylesheet" href="{% static 'mapaider/css/leaflet.css' %}"/>
-    <link rel="stylesheet" href="/static/css/qgis2web.css"/>
-    <link rel="stylesheet" href="/static/css/fontawesome-all.min.css"/>
-    <link rel="stylesheet" href="/static/css/MarkerCluster.css"/>
-    <link rel="stylesheet" href="/static/css/MarkerCluster.Default.css"/>
-    <link rel="stylesheet" href="/static/css/leaflet-control-geocoder.Geocoder.css"/>
+    <link rel="stylesheet" href="{% static 'css/qgis2web.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/fontawesome-all.min.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/MarkerCluster.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/MarkerCluster.Default.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/leaflet-control-geocoder.Geocoder.css' %}"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.css"/>
 
     <style>
@@ -63,18 +63,18 @@
 <body>
 <div id="map"></div>
 
-<script src="/static/js/qgis2web_expressions.js"></script>
-<script src="{% static '/mapaider/js/leaflet.js' %}"></script>
+<script src="{% static 'js/qgis2web_expressions.js' %}"></script>
+<script src="{% static 'mapaider/js/leaflet.js' %}"></script>
 <script src="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.js"></script>
-<script src="/static/js/leaflet.rotatedMarker.js"></script>
-<script src="/static/js/leaflet-hash.js"></script>
-<script src="{% static '/mapaider/js/autolinker.min.js' %}"></script>
-<script src="/static/js/rbush.min.js"></script>
-<script src="/static/js/labelgun.min.js"></script>
-<script src="/static/js/labels.js"></script>
-<script src="/static/js/leaflet-control-geocoder.Geocoder.js"></script>
-<script src="/static/js/leaflet.markercluster.js"></script>
-<script src="{% static '/mapaider/js/mapaider.js' %}"></script>
+<script src="{% static 'js/leaflet.rotatedMarker.js' %}"></script>
+<script src="{% static 'js/leaflet-hash.js' %}"></script>
+<script src="{% static 'mapaider/js/autolinker.min.js' %}"></script>
+<script src="{% static 'js/rbush.min.js' %}"></script>
+<script src="{% static 'js/labelgun.min.js' %}"></script>
+<script src="{% static 'js/labels.js' %}"></script>
+<script src="{% static 'js/leaflet-control-geocoder.Geocoder.js' %}"></script>
+<script src="{% static 'js/leaflet.markercluster.js' %}"></script>
+<script src="{% static 'mapaider/js/mapaider.js' %}"></script>
 
 <script>
     var map = L.map("map", {
@@ -151,21 +151,21 @@
 
     function getLayerStyle(layer) {
         const default_icon = L.icon({
-            iconUrl: "/static/markers/default-marker.svg",
+            iconUrl: "/statix/markers/default-marker.svg",
             iconSize: [24, 24],
         })
 
         const layer_icons = {
             "14fa7d82-e64e-4624-924e-bca094c4b354": L.icon({
-                iconUrl: "/static/markers/ukraine-flag.svg",
+                iconUrl: "/statix/markers/ukraine-flag.svg",
                 iconSize: [32, 32],
             }),
             "099786ba-1c5b-48d2-9734-181c7749c09d": L.icon({
-                iconUrl: "/static/markers/russia-flag-circle.svg",
+                iconUrl: "/statix/markers/russia-flag-circle.svg",
                 iconSize: [24, 24],
             }),
             "2b69cb6a-0716-4fcb-a943-063f54dcbb39": L.icon({
-                iconUrl: "/static/markers/boat.svg",
+                iconUrl: "/statix/markers/boat.svg",
                 iconSize: [24, 24],
             })
         }

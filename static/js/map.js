@@ -41,23 +41,23 @@ const createLayerPanel = (collapsed=true) => {
     var baseMaps = {}
     L.control
         .layers(baseMaps, {
-            '<img src="/static/legend/GardenPledges_11.png" /> Garden Pledges':
+            '<img src="/statix/legend/GardenPledges_11.png" /> Garden Pledges':
                 layers["garden-pledges"],
-            '<img src="/static/legend/GovernmentPledges_10.png" /> Government Pledges':
+            '<img src="/statix/legend/GovernmentPledges_10.png" /> Government Pledges':
                 layers["government-pledges"],
-            '<img src="/static/legend/Government_9.png" /> Government':
+            '<img src="/statix/legend/Government_9.png" /> Government':
             cluster_Government_9,
-            '<img src="/static/legend/FarmPledges_8.png" /> Farm Pledges':
+            '<img src="/statix/legend/FarmPledges_8.png" /> Farm Pledges':
                 layers["farm-pledges"],
-            '<img src="/static/legend/Farms_7.png" /> Farms': cluster_Farms_7,
-            '<img src="/static/legend/ChurchPledge_6.png" /> Church Pledge':
+            '<img src="/statix/legend/Farms_7.png" /> Farms': cluster_Farms_7,
+            '<img src="/statix/legend/ChurchPledge_6.png" /> Church Pledge':
                 layers["church-pledges"],
-            '<img src="/static/legend/Churches_5.png" /> Churches':
+            '<img src="/statix/legend/Churches_5.png" /> Churches':
             cluster_Churches_5,
-            '<img src="/static/legend/SchoolPledges_4.png" /> School Pledges':
+            '<img src="/statix/legend/SchoolPledges_4.png" /> School Pledges':
                 layers["school-pledges"],
-            '<img src="/static/legend/Schools_3.png" /> Schools': cluster_Schools_3,
-            '<img src="/static/legend/RailwayStationPledges.png" /> Railway Station Pledges':
+            '<img src="/statix/legend/Schools_3.png" /> Schools': cluster_Schools_3,
+            '<img src="/statix/legend/RailwayStationPledges.png" /> Railway Station Pledges':
                 layers["railway-station-pledges"],
             "Background map": layer_Backgroundmap_2,
             "WildEast background": layer_WildEastbackground_1,

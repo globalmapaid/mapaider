@@ -9,12 +9,12 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
 
 
-    <link rel="stylesheet" href="/static/css/leaflet.css" />
-    <link rel="stylesheet" href="/static/css/qgis2web.css" />
-    <link rel="stylesheet" href="/static/css/fontawesome-all.min.css" />
-    <link rel="stylesheet" href="/static/css/MarkerCluster.css" />
-    <link rel="stylesheet" href="/static/css/MarkerCluster.Default.css" />
-    <link rel="stylesheet" href="/static/css/leaflet-control-geocoder.Geocoder.css" />
+    <link rel="stylesheet" href="{% static 'css/leaflet.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/qgis2web.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/fontawesome-all.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/MarkerCluster.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/MarkerCluster.Default.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/leaflet-control-geocoder.Geocoder.css' %}" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.css" />
 
     <link
@@ -70,23 +70,23 @@
   <body>
     <div id="map"></div>
 
-    <script src="/static/js/qgis2web_expressions.js"></script>
-    <script src="/static/js/leaflet.js"></script>
+    <script src="{% static 'js/qgis2web_expressions.js' %}"></script>
+    <script src="{% static 'js/leaflet.js' %}"></script>
     <script src="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.js"></script>
-    <script src="/static/js/leaflet.rotatedMarker.js"></script>
-    <script src="/static/js/leaflet.pattern.js"></script>
-    <script src="/static/js/leaflet-hash.js"></script>
-    <script src="/static/js/Autolinker.min.js"></script>
-    <script src="/static/js/rbush.min.js"></script>
-    <script src="/static/js/labelgun.min.js"></script>
-    <script src="/static/js/labels.js"></script>
-    <script src="/static/js/leaflet-control-geocoder.Geocoder.js"></script>
-    <script src="/static/js/leaflet.markercluster.js"></script>
-    <script src="/static/js/map.js"></script>
-    <script src="/static/data/Schools_3.js"></script>
-    <script src="/static/data/Churches_5.js"></script>
-    <script src="/static/data/Farms_7.js"></script>
-    <script src="/static/data/Government_9.js"></script>
+    <script src="{% static 'js/leaflet.rotatedMarker.js' %}"></script>
+    <script src="{% static 'js/leaflet.pattern.js' %}"></script>
+    <script src="{% static 'js/leaflet-hash.js' %}"></script>
+    <script src="{% static 'js/Autolinker.min.js' %}"></script>
+    <script src="{% static 'js/rbush.min.js' %}"></script>
+    <script src="{% static 'js/labelgun.min.js' %}"></script>
+    <script src="{% static 'js/labels.js' %}"></script>
+    <script src="{% static 'js/leaflet-control-geocoder.Geocoder.js' %}"></script>
+    <script src="{% static 'js/leaflet.markercluster.js' %}"></script>
+    <script src="{% static 'js/map.js' %}"></script>
+    <script src="{% static 'data/Schools_3.js' %}"></script>
+    <script src="{% static 'data/Churches_5.js' %}"></script>
+    <script src="{% static 'data/Farms_7.js' %}"></script>
+    <script src="{% static 'data/Government_9.js' %}"></script>
 
     <script>
       var map = L.map("map", {
@@ -144,7 +144,7 @@
 
       map.createPane("pane_WildEastbackground_1")
       //map.getPane("pane_WildEastbackground_1").style.zIndex = 202;
-      var img_WildEastbackground_1 = "/static/data/WildEastbackground_1.png"
+      var img_WildEastbackground_1 = "/statix/data/WildEastbackground_1.png"
       var img_bounds_WildEastbackground_1 = [
         [51.178016618442186, -0.5091631799223866],
         [53.649163239541785, 1.803079068638552],
@@ -211,7 +211,7 @@
           rotationAngle: 0.0,
           rotationOrigin: "center center",
           icon: L.icon({
-            iconUrl: "/static/markers/paw-orange.svg",
+            iconUrl: "/statix/markers/paw-orange.svg",
             iconSize: [20, 20],
           }),
           interactive: true,
@@ -305,7 +305,7 @@
           rotationAngle: 0.0,
           rotationOrigin: "center center",
           icon: L.icon({
-            iconUrl: "/static/markers/church_orange.svg",
+            iconUrl: "/statix/markers/church_orange.svg",
             iconSize: [20, 20],
           }),
           interactive: true,
@@ -399,7 +399,7 @@
           rotationAngle: 0.0,
           rotationOrigin: "center center",
           icon: L.icon({
-            iconUrl: "/static/markers/tractor-svgrepo-com (3).svg",
+            iconUrl: "/statix/markers/tractor-svgrepo-com (3).svg",
             iconSize: [25, 25],
           }),
           interactive: true,
@@ -493,7 +493,7 @@
           rotationAngle: 0.0,
           rotationOrigin: "center center",
           icon: L.icon({
-            iconUrl: "/static/markers/crown-orange2.svg",
+            iconUrl: "/statix/markers/crown-orange2.svg",
             iconSize: [23, 13],
           }),
           interactive: true,
@@ -646,27 +646,27 @@
       function getLayerStyle(layer) {
         layer_icons = {
           "garden-pledges": L.icon({
-            iconUrl: "/static/markers/WE_green.svg",
+            iconUrl: "/statix/markers/WE_green.svg",
             iconSize: [17, 25],
           }),
           "farm-pledges": L.icon({
-            iconUrl: "/static/markers/tractor-green.svg",
+            iconUrl: "/statix/markers/tractor-green.svg",
             iconSize: [25, 25],
           }),
           "church-pledges": L.icon({
-            iconUrl: "/static/markers/church_green.svg",
+            iconUrl: "/statix/markers/church_green.svg",
             iconSize: [20, 20],
           }),
           "government-pledges": L.icon({
-            iconUrl: "/static/markers/crown-green.svg",
+            iconUrl: "/statix/markers/crown-green.svg",
             iconSize: [23, 13],
           }),
           "school-pledges": L.icon({
-            iconUrl: "/static/markers/paw_green.svg",
+            iconUrl: "/statix/markers/paw_green.svg",
             iconSize: [20, 20],
           }),
           "railway-station-pledges": L.icon({
-            iconUrl: "/static/markers/green-steam-train.svg",
+            iconUrl: "/statix/markers/green-steam-train.svg",
             iconSize: [20, 20],
           }),
         }

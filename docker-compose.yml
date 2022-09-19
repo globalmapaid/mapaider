@@ -37,18 +37,21 @@ services:
     restart: "on-failure"
     networks:
       - wemod-net
-#  client:
-#    build:
-#      context: ./client
-#      dockerfile: Dockerfile.dev
-#    container_name: wemod_frontend
-#    volumes:
-#      - ./app/node_modules
-#      - ./client:/app
-#    depends_on:
-#      - wemod-api
-#    networks:
-#      - wemod-api
+
+  wemod-ui:
+    build:
+      context: ui
+      dockerfile: Dockerfile.dev
+    container_name: wemod-ui
+    ports:
+      - "3000:3000"
+    volumes:
+      #- ./app/node_modules
+      - ./ui:/app
+    depends_on:
+      - wemod-api
+    networks:
+      - wemod-net
 
   nginx:
     container_name: wemod-nginx
