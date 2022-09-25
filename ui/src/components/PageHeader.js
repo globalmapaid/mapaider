@@ -1,6 +1,6 @@
 import React from "react";
 import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/ToolBar';
+import {Toolbar} from '@mui/material';
 import Typography from '@mui/material/Typography';
 import CssBaseline from '@mui/material/CssBaseline';
 
