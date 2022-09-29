@@ -9,7 +9,7 @@ services:
     command: >
       sh -c "cd jstoolbox && npm install -y && npm run prod && cd ..
       && python3 manage.py collectstatic --noinput
-      && gunicorn wemod_api.wsgi:application --bind 0.0.0.0:8000"
+      && gunicorn wemod_api.wsgi:application --bind :8000 --reload"
 #      && python3 manage.py runserver 0.0.0.0:8000"
     volumes:
       - .:/app

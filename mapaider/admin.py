@@ -4,6 +4,12 @@ from leaflet.admin import LeafletGeoAdmin
 from .models import Organization, Map, Layer, MapLayer, MapFeature, MapLink
 
 
+@admin.register(Map)
+class MapAdmin(admin.ModelAdmin):
+    list_display = ['name', 'organization', 'is_active']
+    list_filter = ['organization', 'is_active']
+
+
 @admin.register(MapLayer)
 class MapLayerAdmin(admin.ModelAdmin):
     list_display = ['layer', 'map', 'priority', 'organization', 'contribution']
@@ -61,4 +67,4 @@ class MapLinkAdmin(admin.ModelAdmin):
     ordering = ['map', 'sort']
 
 
-admin.site.register([Organization, Map])
+admin.site.register([Organization])

@@ -1,25 +1,29 @@
-import logo from './logo.svg';
+import React, {useEffect, useState} from "react";
+import MapList from './components/landing/MapList'
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          MapAider
-        </p>
-        <a
-          className="App-link"
-          href="https://www.globalmapaid.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Global MapAid
-        </a>
-      </header>
-    </div>
-  );
+const App = () => {
+    const [appState, setAppState] = useState({
+        loading: false,
+        maps: null
+    });
+
+    useEffect(() => {
+        setAppState({ loading: true})
+        const apiUrl = '/api/mapaider/map'
+        fetch(apiUrl)
+            .then((data) => data.json())
+            .then((data) => {
+                setAppState({ loading: false, maps: data})
+            })
+    }, [setAppState])
+
+    return (
+        <div className='App'>
+            <h1>Popular Maps</h1>
+            <MapList maps={appState.maps} />
+        </div>
+    );
 }
 
 export default App;

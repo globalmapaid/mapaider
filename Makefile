@@ -13,6 +13,9 @@ up:
 down:
 	docker-compose down
 
+restart:
+	docker-compose restart
+
 migrate:
 	docker-compose exec wemod-api python3 manage.py migrate --noinput
 

@@ -1,8 +1,14 @@
 from rest_framework import serializers
 from rest_framework_gis import serializers as gis_serializers
-from rest_framework_gis.serializers import GeoFeatureModelSerializer, GeoFeatureModelListSerializer
+from rest_framework_gis.serializers import ListSerializer, GeoFeatureModelSerializer, GeoFeatureModelListSerializer
 from .models import Map, Layer, MapLayer, MapFeature, MapLink
 from .validators import MapLayerContributionAccess
+
+
+class PublicMapSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Map
+        fields = ['uuid', 'name', 'slug']
 
 
 class MapViewerVisibleFeatureSerializer(GeoFeatureModelListSerializer):
