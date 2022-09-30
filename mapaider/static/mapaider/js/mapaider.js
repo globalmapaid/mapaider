@@ -60,7 +60,7 @@ const createLayerPanel = (baseMaps, mapLayers, layerStyle, collapsed = true) => 
 
         let layerLabel = mapLayer.layer.name
         const label = '<img alt="' + layerLabel + '" src="' + icon + '" class="inline" style="height:16px; width:16px"> ' + layerLabel
-        overlayMaps[label] = layers[mapLayer.uuid]
+        overlayMaps[label] = clusters[mapLayer.uuid]
     })
 
     overlayMaps = {
@@ -73,4 +73,5 @@ const createLayerPanel = (baseMaps, mapLayers, layerStyle, collapsed = true) => 
 
 }
 
-var layers = {}
+const layers = {}
+const clusters = {}
