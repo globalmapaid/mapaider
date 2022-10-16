@@ -99,7 +99,7 @@ class MapLayer(models.Model):
         help_text='Leave blank to inherit the layer name')
     priority = models.PositiveSmallIntegerField(default=1)
     contribution = models.BooleanField(default=False)
-    created_at = models.DateTimeField(_('Date Created'), auto_now_add=True)
+    created_at = models.DateTimeField(_('Date Created'), auto_now_add=True, null=True)
     updated_at = models.DateTimeField(_('Date Updated'), auto_now=True)
 
     class Meta:

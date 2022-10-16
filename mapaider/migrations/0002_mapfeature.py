@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('uuid', models.UUIDField(db_index=True, default=uuid.uuid4, editable=False)),
-                ('name', models.CharField(max_length=80, verbose_name='feature name')),
+                ('name', models.CharField(max_length=200, verbose_name='feature name')),
                 ('geom', django.contrib.gis.db.models.fields.GeometryField(geography=True, null=True, srid=4326, verbose_name='geometry')),
                 ('geom_type', models.CharField(blank=True, max_length=16, null=True, verbose_name='geometry type')),
                 ('latitude', models.DecimalField(blank=True, decimal_places=7, max_digits=10, null=True)),
