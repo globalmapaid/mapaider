@@ -1,23 +1,11 @@
-from django.shortcuts import render
-
-from django.contrib import auth
-from rest_framework import generics, permissions, viewsets, routers
+from rest_framework import generics, permissions
 from rest_framework.response import Response
 from knox.models import AuthToken
 
-from .models import User
 from .serializers import UserSerializer, LoginSerializer
 
 
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-    permission_classes = [
-        permissions.IsAuthenticated
-    ]
-
-
-class SignInAPI(generics.GenericAPIView):
+class SignInAPIView(generics.GenericAPIView):
     serializer_class = LoginSerializer
 
     def post(self, request):
@@ -30,7 +18,7 @@ class SignInAPI(generics.GenericAPIView):
         })
 
 
-class CurrentUser(generics.RetrieveAPIView):
+class CurrentUserAPIView(generics.RetrieveAPIView):
     permission_classes = [
         permissions.IsAuthenticated
     ]

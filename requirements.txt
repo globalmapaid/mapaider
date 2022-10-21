@@ -1,9 +1,9 @@
-asgiref==3.5.0
+asgiref==3.5.2
 certifi==2022.5.18.1
 cffi==1.15.0
 charset-normalizer==2.0.12
 cryptography==36.0.1
-Django==4.0.2
+Django==4.1.2
 django-cors-headers==3.11.0
 django-environ==0.4.5
 django-filter==2.4.0

@@ -16,22 +16,14 @@ Including another URLconf
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-from django.views.generic import RedirectView
 
-from pledges.views import *
 from mapaider_core import settings
 
-admin.site.site_url = "/pledge/map"
+admin.site.site_url = "/mapaider/"
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('pledge/', include('pledges.urls')),
-    path('api/pledge/', include('pledges.urls_api')),
-
+    path('api/', include('mapaider_core.urls_api')),
     path('mapaider/', include('mapaider.urls')),
-    path('api/mapaider/', include('mapaider.urls_api')),
-    # path('import', import_shapefile)
-    # path('import', import_excel)
-    # path('resave', resave_all)
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
