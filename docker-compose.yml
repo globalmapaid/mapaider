@@ -54,7 +54,7 @@ services:
     networks:
       - mapaider-net
 
-  mapaider-nginx:
+  nginx:
     container_name: mapaider-nginx
     restart: always
     depends_on:
