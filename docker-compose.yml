@@ -1,11 +1,11 @@
 version: "3.3"
 
 services:
-  wemod-api:
+  mapaider-api:
     build:
       context: .
       dockerfile: Dockerfile.dev
-    container_name: wemod-api
+    container_name: mapaider-api
     command: >
       sh -c "cd jstoolbox && npm install -y && npm run prod && cd ..
       && python3 manage.py collectstatic --noinput
@@ -19,13 +19,13 @@ services:
       - .env
     restart: "on-failure"
     depends_on:
-      - wemod-db
+      - mapaider-db
     networks:
-      - wemod-net
+      - mapaider-net
 
-  wemod-db:
+  mapaider-db:
     image: kartoza/postgis:13.0
-    container_name: wemod-db
+    container_name: mapaider-db
     ports:
       - "5432:5432"
     volumes:
@@ -36,13 +36,13 @@ services:
       - POSTGRES_DB=${POSTGRES_DB}
     restart: "on-failure"
     networks:
-      - wemod-net
+      - mapaider-net
 
-  wemod-ui:
+  mapaider-ui:
     build:
       context: ui
       dockerfile: Dockerfile.dev
-    container_name: wemod-ui
+    container_name: mapaider-ui
     ports:
       - "3000:3000"
     volumes:
@@ -50,25 +50,25 @@ services:
       - ./ui:/app
     stdin_open: true
     depends_on:
-      - wemod-api
+      - mapaider-api
     networks:
-      - wemod-net
+      - mapaider-net
 
-  nginx:
-    container_name: wemod-nginx
+  mapaider-nginx:
+    container_name: mapaider-nginx
     restart: always
     depends_on:
-      - wemod-api
+      - mapaider-api
     build:
       context: ./nginx
       dockerfile: Dockerfile.dev
     ports:
       - "8090:80"
     networks:
-      - wemod-net
+      - mapaider-net
 
 networks:
-  wemod-net:
+  mapaider-net:
     driver: bridge
 
 volumes:
