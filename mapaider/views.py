@@ -12,7 +12,7 @@ from .serializers import MapViewerMapSerializer, MapViewerLayerSerializer, Contr
 
 
 class MapListView(ListAPIView):
-    queryset = Map.objects.filter(is_active=True)
+    queryset = Map.activeObjects.all()
     serializer_class = PublicMapSerializer
 
 

@@ -146,3 +146,5 @@ cython_debug/
 /static/data
 /staticfiles
 /static/css/tailwind-compiled.css
+
+**/.DS_Store

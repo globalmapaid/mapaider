@@ -34,6 +34,10 @@ class Organization(models.Model):
 
 
 class Map(models.Model):
+    class ActiveObjects(models.Manager):
+        def get_queryset(self):
+            return super().get_queryset().filter(is_active=True)
+
     uuid = models.UUIDField(_('uuid'), db_index=True, default=uuid.uuid4, editable=False)
     organization = models.ForeignKey('Organization', on_delete=models.CASCADE)
     name = models.CharField(_('map name'), max_length=80)
@@ -50,6 +54,10 @@ class Map(models.Model):
     updated_at = models.DateTimeField(_('Date Updated'), auto_now=True)
 
     layers = models.ManyToManyField('Layer', through='MapLayer')
+
+    # Model managers
+    objects = models.Manager()
+    activeObjects = ActiveObjects()
 
     class Meta:
         verbose_name = 'Map'
