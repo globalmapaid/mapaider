@@ -131,12 +131,14 @@
             fieldSet.forEach(f => {
                 if (feature.properties.feature_data[f.field] != null) {
                     let fieldTitle = f.title
-                    let fieldValue = ''
+                    let rawValue = feature.properties.feature_data[f.field]
 
                     if (f.type === 'url') {
-                        fieldValue = `<a href="${feature.properties.feature_data[f.field]}" target="_blank">Click here</a>`
+                        fieldValue = `<a href="${rawValue}" target="_blank">Click here</a>`
+                    } else if (f.type === 'email') {
+                        fieldValue = `<a href="mailto:${rawValue}" target="_blank">${rawValue}</a>`
                     } else {
-                        fieldValue = feature.properties.feature_data[f.field]
+                        fieldValue = rawValue
                     }
 
                     popupContent += `<tr><th scope="row" class="pr-4 whitespace-nowrap">${fieldTitle}</th><td>${fieldValue}</td></tr>`
