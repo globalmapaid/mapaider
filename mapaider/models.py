@@ -4,6 +4,8 @@ from django.contrib.gis.geos import Point, Polygon
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 
+from users.models import User
+
 
 class Organization(models.Model):
     uuid = models.UUIDField(db_index=True, default=uuid.uuid4, editable=False)
@@ -20,6 +22,8 @@ class Organization(models.Model):
     created_at = models.DateTimeField(_('Date Created'), auto_now_add=True)
     updated_at = models.DateTimeField(_('Date Updated'), auto_now=True)
 
+    users = models.ManyToManyField(User, through='Membership', related_name='organizations')
+
     class Meta:
         verbose_name = 'Organisation'
         verbose_name_plural = 'Organisations'
@@ -31,6 +35,25 @@ class Organization(models.Model):
         if not self.slug:
             self.slug = slugify(self.name)
         return super().save(*args, **kwargs)
+
+
+class Membership(models.Model):
+    ROLE_MEMBER = 'MEMBER'
+    ROLE_ADMIN = 'ADMIN'
+
+    ROLE_OPTIONS = [
+        (ROLE_MEMBER, 'Member'),
+        (ROLE_ADMIN, 'Administrator'),
+    ]
+
+    uuid = models.UUIDField(_('uuid'), db_index=True, default=uuid.uuid4, editable=False)
+    organization = models.ForeignKey('Organization', on_delete=models.CASCADE, related_name='memberships')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='memberships')
+    role = models.CharField(_('role'), max_length=20, choices=ROLE_OPTIONS, default=ROLE_MEMBER)
+    assigned_at = models.DateTimeField(_('assigned at'), auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.organization} - {self.user} ({self.role})'
 
 
 class Map(models.Model):

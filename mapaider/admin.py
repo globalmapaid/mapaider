@@ -1,7 +1,7 @@
 from django.contrib import admin
 from leaflet.admin import LeafletGeoAdmin
 
-from .models import Organization, Map, Layer, MapLayer, MapFeature, MapLink
+from .models import Organization, Map, Layer, MapLayer, MapFeature, MapLink, Membership
 
 
 @admin.register(Map)
@@ -66,5 +66,10 @@ class MapLinkAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_at'
     ordering = ['map', 'sort']
 
+@admin.register(Membership)
+class MembershipAdmin(admin.ModelAdmin):
+    list_display = ['organization', 'user', 'role']
+    list_filter = ['organization']
+    search_fields = ['user']
 
 admin.site.register([Organization])
