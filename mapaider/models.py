@@ -100,6 +100,7 @@ class Layer(models.Model):
     organization = models.ForeignKey('Organization', on_delete=models.CASCADE)
     name = models.CharField(_('layer name'), max_length=80)
     field_set = models.JSONField(_('field set'), null=True, blank=True, default=list)
+    config = models.JSONField(_('configuration'), null=True, blank=True, default=dict)
     is_active = models.BooleanField(
         _('active'),
         default=True,
@@ -118,6 +119,14 @@ class Layer(models.Model):
 
     def __str__(self):
         return self.name
+
+    @staticmethod
+    def get_default_config():
+        return {
+            'clustering': {
+                'enabled': False,
+            },
+        }
 
 
 class MapLayer(models.Model):

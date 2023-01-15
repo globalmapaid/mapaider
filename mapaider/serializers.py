@@ -36,14 +36,22 @@ class MapViewerMapFeatureSerializer(GeoFeatureModelSerializer):
 
 class MapViewerLayerSerializer(serializers.ModelSerializer):
     feature_set = serializers.SerializerMethodField()
+    config = serializers.SerializerMethodField()
 
     class Meta:
         model = Layer
-        fields = ['uuid', 'name', 'field_set', 'feature_set']
+        fields = ['uuid', 'name', 'config', 'field_set', 'feature_set']
 
     @staticmethod
-    def get_feature_set(obj):
+    def get_feature_set(obj: Layer):
         return MapViewerMapFeatureSerializer(obj.features, many=True).data
+
+    @staticmethod
+    def get_config(obj: Layer) -> dict:
+        layer_config = obj.config
+        default_config = Layer.get_default_config()
+        default_config.update(layer_config)
+        return default_config
 
 
 class MapViewerMapLayerSerializer(serializers.ModelSerializer):
