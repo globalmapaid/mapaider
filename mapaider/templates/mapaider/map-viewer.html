@@ -225,7 +225,7 @@
         // Put the search panel
         createSearchPanel()
 
-        mapLayers = mapData.layer_set
+        let mapLayers = mapData.layer_set
         mapLayers.forEach((mapLayer) => {
             let layer = mapLayer.layer
             let pane = map.createPane("pane_" + mapLayer.uuid)
@@ -247,25 +247,34 @@
                 },
             })
 
-            clusters[mapLayer.uuid] = new L.MarkerClusterGroup({
-                showCoverageOnHover: false,
-                spiderfyDistanceMultiplier: 2,
-            })
+            let targetObject
 
-            clusters[mapLayer.uuid].addLayer(layers[mapLayer.uuid])
+            // Clustering control
+            if (layer.config.clustering.enabled) {
+
+                clusters[mapLayer.uuid] = new L.MarkerClusterGroup({
+                    showCoverageOnHover: false,
+                    spiderfyDistanceMultiplier: 2,
+                })
+
+                clusters[mapLayer.uuid].addLayer(layers[mapLayer.uuid])
+
+                targetObject = clusters[mapLayer.uuid]
+            } else {
+                targetObject = layers[mapLayer.uuid]
+            }
 
             let tooltipOptions = {
                 sticky: true,
                 className: 'mapaider-feature-tooltip bg-red-400'
             }
-
-            clusters[mapLayer.uuid].bindTooltip(function (feature) {
+            targetObject.bindTooltip(function (feature) {
                 return feature.feature.properties.name
             }, tooltipOptions)
 
             bounds_group.addLayer(layers[mapLayer.uuid])
 
-            map.addLayer(clusters[mapLayer.uuid])
+            map.addLayer(targetObject)
         })
 
         createLayerPanel(baseMaps, mapLayers, getLayerStyle, false)

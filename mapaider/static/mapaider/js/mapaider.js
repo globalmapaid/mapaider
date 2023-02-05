@@ -59,8 +59,9 @@ const createLayerPanel = (baseMaps, mapLayers, layerStyle, collapsed = true) => 
         const icon = style.icon.options.iconUrl
 
         let layerLabel = mapLayer.layer.name
+        let layerObject = mapLayer.layer.config.clustering.enabled ? clusters[mapLayer.uuid] : layers[mapLayer.uuid]
         const label = '<img alt="' + layerLabel + '" src="' + icon + '" class="inline" style="height:16px; width:16px"> ' + layerLabel
-        overlayMaps[label] = clusters[mapLayer.uuid]
+        overlayMaps[label] = layerObject
     })
 
     overlayMaps = {
