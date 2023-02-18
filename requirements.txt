@@ -10,7 +10,6 @@ django-cors-headers==3.11.0
 django-environ==0.4.5
 django-filter==2.4.0
 django-leaflet==0.28.0
-django-rest-knox==4.2.0
 djangorestframework==3.13.1
 djangorestframework-gis==0.18
 dms2dec==0.1

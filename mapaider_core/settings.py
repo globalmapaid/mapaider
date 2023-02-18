@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
-import os
+
 from pathlib import Path
 import environ
 
@@ -42,9 +42,10 @@ INSTALLED_APPS = [
 
     # 3rd Party Apps
     'rest_framework',
+    'rest_framework.authtoken',
     'rest_framework_gis',
+    'dj_rest_auth',
     'drf_yasg',
-    'knox',
     'corsheaders',
     'leaflet',
 
@@ -141,7 +142,7 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',),
+    'DEFAULT_AUTHENTICATION_CLASSES': ('rest_framework.authentication.TokenAuthentication',),
 }
 
 CSRF_TRUSTED_ORIGINS = env('CSRF_TRUSTED_ORIGINS').split(',')

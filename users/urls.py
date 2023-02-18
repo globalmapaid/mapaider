@@ -1,10 +1,9 @@
-from django.urls import path
+from django.urls import path, include
 from .views import SignInAPIView, CurrentUserAPIView
-from knox import views as knox_views
+from dj_rest_auth.views import LogoutView
 
 urlpatterns = [
-    path('user', CurrentUserAPIView.as_view(), name='auth.user'),
-    path('login', SignInAPIView.as_view(), name='auth.login'),
-    path('logout', knox_views.LogoutView.as_view(), name='auth.logout'),
-    path('logoutall', knox_views.LogoutAllView.as_view(), name='auth.logoutall'),
+    path('user', CurrentUserAPIView.as_view(), name='rest_user_details'),
+    path('login', SignInAPIView.as_view(), name='rest_login'),
+    path('logout', LogoutView.as_view(), name='rest_logout'),
 ]
