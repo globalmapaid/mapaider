@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate
 from rest_framework import serializers
+from dj_rest_auth.registration.serializers import RegisterSerializer as DRARegisterSerializer
 
 from users.models import User
 
@@ -7,7 +8,7 @@ from users.models import User
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['email', 'first_name', 'last_name']
+        fields = ['uuid', 'email', 'first_name', 'last_name']
 
 
 class LoginSerializer(serializers.Serializer):
@@ -20,3 +21,7 @@ class LoginSerializer(serializers.Serializer):
             return user
 
         raise serializers.ValidationError('Incorrect Credentials')
+
+
+class RegisterSerializer(DRARegisterSerializer):
+    username = None
