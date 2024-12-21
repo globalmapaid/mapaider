@@ -5,7 +5,7 @@ ifneq (,$(wildcard ./.env))
 endif
 
 build:
-	docker-compose up -d --build --remove-orphans
+	docker compose up -d --build --remove-orphans
 
 up:
 	docker compose up -d
