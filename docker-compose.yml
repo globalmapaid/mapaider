@@ -31,8 +31,6 @@ services:
       && gunicorn mapaider_core.wsgi:application --bind :8000 --reload"
     volumes:
       - .:/app
-    ports:
-      - "8000:8000"
     env_file:
       - .env
     restart: on-failure
@@ -55,8 +53,6 @@ services:
       context: ui
       dockerfile: Dockerfile.dev
     container_name: mapaider-ui
-    ports:
-      - "3000:3000"
     volumes:
       - /app/node_modules
       - ./ui:/app
