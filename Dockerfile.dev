@@ -1,4 +1,4 @@
-FROM python:buster
+FROM python:3.11-slim-bookworm
 
 # set our working directory inside the container (when it's finally created from this image)
 # depending on your environment you may need to
@@ -15,17 +15,24 @@ ENV PYTHONDONTWRITEBYTECODE 1
 # Prevents Python from buffering stdout and stderr
 ENV PYTHONUNBUFFERED 1
 
-# install psycopg2 dependencies
-RUN apt update \
-   && apt -y install netcat gcc postgresql \
-   && apt clean
+# Install OS dependencies
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+      curl ca-certificates gnupg \
+      netcat-openbsd \
+      gcc build-essential \
+      postgresql-client libpq-dev \
+      libffi-dev \
+      make binutils \
+      libproj-dev \
+      gdal-bin libgdal-dev \
+      net-tools && \
+    rm -rf /var/lib/apt/lists/*
 
-# Setup GDAL
-RUN apt update -y &&\
-   apt install -y make binutils libproj-dev gdal-bin python-gdal python3-gdal net-tools build-essential libpq-dev
-
-RUN curl -fsSL https://deb.nodesource.com/setup_17.x | bash -
-RUN apt-get install -y nodejs
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends nodejs && \
+    rm -rf /var/lib/apt/lists/*
 
 # upgrade pip version
 RUN pip install --upgrade pip
