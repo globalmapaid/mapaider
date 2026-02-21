@@ -162,6 +162,7 @@ AUTH_USER_MODEL = 'users.User'
 # dj-rest-auth
 REST_AUTH = {
     'REGISTER_SERIALIZER': 'users.serializers.RegisterSerializer',
+    'SESSION_LOGIN': False,
 }
 
 # allauth

@@ -1,8 +1,13 @@
+from dj_rest_auth.views import LogoutView as DjRestAuthLogoutView
 from rest_framework import generics, permissions
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 
 from .serializers import UserSerializer, LoginSerializer
+
+
+class LogoutView(DjRestAuthLogoutView):
+    permission_classes = [permissions.IsAuthenticated]
 
 
 class SignInAPIView(generics.GenericAPIView):

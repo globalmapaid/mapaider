@@ -13,10 +13,17 @@ from users.models import User
 class UserFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = User
+        skip_postgeneration_save = True
 
     email = factory.Sequence(lambda n: f'user{n}@example.com')
     is_active = True
-    password = factory.PostGenerationMethodCall('set_password', 'testpass123')
+
+    @factory.post_generation
+    def password(obj, create, extracted, **kwargs):
+        if not create:
+            return
+        obj.set_password(extracted or 'testpass123')
+        obj.save()
 
 
 class OrganizationFactory(factory.django.DjangoModelFactory):

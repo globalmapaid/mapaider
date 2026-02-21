@@ -1,6 +1,6 @@
 import pytest
 from django.contrib.auth import get_user_model
-from django.test import TestCase, override_settings
+from django.test import TestCase
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APIClient
 
@@ -155,12 +155,13 @@ class TestLogoutView:
 
 
 @pytest.mark.django_db
-@override_settings(
-    ACCOUNT_EMAIL_VERIFICATION='none',
-    EMAIL_BACKEND='django.core.mail.backends.locmem.EmailBackend',
-)
 class TestRegistrationView:
     url = '/api/auth/register/'
+
+    @pytest.fixture(autouse=True)
+    def _email_settings(self, settings):
+        settings.ACCOUNT_EMAIL_VERIFICATION = 'none'
+        settings.EMAIL_BACKEND = 'django.core.mail.backends.locmem.EmailBackend'
 
     def _valid_payload(self, email='new@example.com'):
         return {
