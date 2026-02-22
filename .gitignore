@@ -148,3 +148,8 @@ cython_debug/
 /static/css/tailwind-compiled.css
 
 **/.DS_Store
+
+# Claude Code
+/.claude/
+/.mcp.json
+/CLAUDE.md
