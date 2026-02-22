@@ -190,6 +190,11 @@ class TestRegistrationView:
         response = APIClient().post(self.url, data=self._valid_payload(email='existing@example.com'))
         assert response.status_code == 400
 
+    def test_returns_400_when_email_already_exists_different_casing(self, db):
+        UserFactory(email='existing@example.com')
+        response = APIClient().post(self.url, data=self._valid_payload(email='Existing@example.com'))
+        assert response.status_code == 400
+
     def test_returns_400_when_email_missing(self, db):
         payload = {'password1': 'Str0ng!Pass#99', 'password2': 'Str0ng!Pass#99'}
         response = APIClient().post(self.url, data=payload)

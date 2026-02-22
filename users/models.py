@@ -25,11 +25,3 @@ class User(AbstractUser):
         return self.email
 
 
-class UserAccount(User):
-    pass
-
-    class Meta:
-        app_label = 'auth'
-        proxy = True
-        verbose_name = _('user')
-        verbose_name_plural = _('users')
