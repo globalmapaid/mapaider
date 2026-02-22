@@ -145,7 +145,9 @@ class MapLayer(models.Model):
     class Meta:
         verbose_name = 'Map Layer'
         verbose_name_plural = 'Map Layers'
-        unique_together = [['map', 'layer']]
+        constraints = [
+            models.UniqueConstraint(fields=['map', 'layer'], name='unique_maplayer_map_layer')
+        ]
         ordering = ['priority', ]
 
     def __str__(self):

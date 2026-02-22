@@ -46,11 +46,13 @@ test-k:
 test-node:
 	docker compose exec mapaider-api pytest $(NODE)
 
+TEST_MAP_SLUG ?= river-of-flowers
+
 test-e2e:
-	cd e2e && npx playwright test
+	cd e2e && TEST_MAP_SLUG=$(TEST_MAP_SLUG) npx playwright test
 
 test-e2e-headed:
-	cd e2e && npx playwright test --headed
+	cd e2e && TEST_MAP_SLUG=$(TEST_MAP_SLUG) npx playwright test --headed
 
 playwright-install:
 	cd e2e && npm install && npx playwright install chromium

@@ -71,6 +71,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'mapaider_core.urls'
@@ -134,8 +135,6 @@ TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
-USE_L10N = True
-
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
@@ -166,15 +165,17 @@ REST_AUTH = {
 }
 
 # allauth
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_LOGIN_METHODS = {'email'}
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 
 CSRF_TRUSTED_ORIGINS = env('CSRF_TRUSTED_ORIGINS').split(',')
 CORS_ALLOW_ALL_ORIGINS = bool(env('CORS_ALLOW_ALL_ORIGINS'))
 CORS_ALLOWED_ORIGINS = env('CORS_ALLOWED_ORIGINS').split(',')
+
+# drf-yasg
+SWAGGER_USE_COMPAT_RENDERERS = False
 
 LEAFLET_CONFIG = {
     'DEFAULT_CENTER': (51.475, 0),  # Greenwich,

@@ -25,3 +25,9 @@ class LoginSerializer(serializers.Serializer):
 
 class RegisterSerializer(DRARegisterSerializer):
     username = None
+
+    def validate_email(self, email):
+        email = super().validate_email(email)
+        if User.objects.filter(email__iexact=email).exists():
+            raise serializers.ValidationError('A user is already registered with this e-mail address.')
+        return email

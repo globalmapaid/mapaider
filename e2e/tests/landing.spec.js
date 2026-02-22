@@ -5,8 +5,8 @@ test.describe('Landing page', () => {
     await page.goto('/', { waitUntil: 'networkidle' });
   });
 
-  test('page title contains MapAider', async ({ page }) => {
-    await expect(page).toHaveTitle(/MapAider/i);
+  test('page title contains Map Aider', async ({ page }) => {
+    await expect(page).toHaveTitle(/Map Aider/i);
   });
 
   test('h1 heading reads "Popular Maps"', async ({ page }) => {
