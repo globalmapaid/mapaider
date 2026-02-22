@@ -1,6 +1,5 @@
 from django.urls import path, include
-from .views import SignInAPIView, CurrentUserAPIView
-from dj_rest_auth.views import LogoutView
+from .views import SignInAPIView, CurrentUserAPIView, LogoutView
 
 urlpatterns = [
     path('user', CurrentUserAPIView.as_view(), name='rest_user_details'),

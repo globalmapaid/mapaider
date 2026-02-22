@@ -34,3 +34,24 @@ down-v:
 volume:
 	docker volume inspect wemod-project_postgres_data
 
+test:
+	docker compose exec mapaider-api pytest
+
+test-file:
+	docker compose exec mapaider-api pytest $(FILE)
+
+test-k:
+	docker compose exec mapaider-api pytest -k "$(K)"
+
+test-node:
+	docker compose exec mapaider-api pytest $(NODE)
+
+test-e2e:
+	cd e2e && npx playwright test
+
+test-e2e-headed:
+	cd e2e && npx playwright test --headed
+
+playwright-install:
+	cd e2e && npm install && npx playwright install chromium
+
