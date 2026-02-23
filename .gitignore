@@ -1,4 +1,4 @@
-node_nodules/
+node_modules/
 jstoolbox/node_modules
 
 # Byte-compiled / optimized / DLL files
