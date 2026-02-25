@@ -159,6 +159,15 @@ REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'MapAider API Documentation',
+    'VERSION': '1.0.0',
+    'DESCRIPTION': 'API Documentation of MapAider',
+    'SWAGGER_UI_SETTINGS': {
+        'filter': True,
+    },
+}
+
 # Authentication
 AUTH_USER_MODEL = 'users.User'
 
