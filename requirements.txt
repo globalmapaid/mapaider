@@ -8,7 +8,7 @@ djangorestframework-gis==1.2.0
 django-allauth==65.14.3
 dj-rest-auth==7.1.1
 dms2dec==0.1
-drf-yasg==1.21.15
+drf-spectacular==0.29.0
 gunicorn==25.1.0
 openpyxl==3.1.5
 pandas==3.0.1

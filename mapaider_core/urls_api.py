@@ -1,9 +1,10 @@
 from django.urls import path, include
 
-from .views import schema_view
+from .views import SpectacularAPIView, SpectacularSwaggerView
 
 urlpatterns = [
     path('auth/', include('users.urls')),
-    path('doc/', schema_view.with_ui('swagger', cache_timeout=0), name='swagger-schema'),
+    path('doc/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('doc/', SpectacularSwaggerView.as_view(url_name='schema', template_name='api_docs/swagger_ui.html'), name='swagger-ui'),
     path('mapaider/', include('mapaider.urls_api')),
 ]

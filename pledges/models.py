@@ -2,8 +2,8 @@ import uuid as uuid
 from datetime import datetime
 
 from django.contrib.gis.geos import Point, Polygon
-from pytz import timezone
 from django.contrib.gis.db import models
+from django.utils import timezone
 from django.db import connection
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
@@ -90,7 +90,7 @@ class Pledge(models.Model):
         if self.geom is not None:
             self.geom_type = self.geom.geom_type
             if self.submitted_at is None:
-                self.submitted_at = datetime.now(tz=timezone('UTC'))
+                self.submitted_at = timezone.now()
 
             centroid: Point
             if self.geom.geom_type == 'Polygon':
