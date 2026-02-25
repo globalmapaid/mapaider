@@ -51,7 +51,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'dj_rest_auth',
     'dj_rest_auth.registration',
-    'drf_yasg',
+    'drf_spectacular',
     'corsheaders',
     'leaflet',
 
@@ -185,8 +185,6 @@ CSRF_TRUSTED_ORIGINS = env.list('CSRF_TRUSTED_ORIGINS', default=[])
 CORS_ALLOW_ALL_ORIGINS = env.bool('CORS_ALLOW_ALL_ORIGINS', default=False)
 CORS_ALLOWED_ORIGINS = env.list('CORS_ALLOWED_ORIGINS', default=[])
 
-# drf-yasg
-SWAGGER_USE_COMPAT_RENDERERS = False
 
 LEAFLET_CONFIG = {
     'DEFAULT_CENTER': (51.475, 0),  # Greenwich,
