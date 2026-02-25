@@ -160,11 +160,17 @@ REST_FRAMEWORK = {
 }
 
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'MapAider API Documentation',
-    'VERSION': '1.0.0',
-    'DESCRIPTION': 'API Documentation of MapAider',
-    'SWAGGER_UI_SETTINGS': {
-        'filter': True,
+    "TITLE": "MapAider API",
+    "DESCRIPTION": "API documentation",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+    "SWAGGER_UI_SETTINGS": {
+        "deepLinking": True,
+        "persistAuthorization": True,
+        "displayOperationId": False,
+        "displayRequestDuration": True,
+        "filter": True,
+        "tryItOutEnabled": True,
     },
 }
 
