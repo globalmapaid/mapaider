@@ -40,6 +40,30 @@ test.describe('Map viewer', () => {
     await expect(page.locator('.leaflet-control-container .info')).toBeVisible();
   });
 
+  // The basemap is drawn into a custom pane, so its tiles are not under
+  // .leaflet-tile-pane — match the tile images directly.
+  const tileSelector = 'img.leaflet-tile';
+
+  test('basemap tiles are requested from a keyless provider', async ({ page }) => {
+    const tiles = page.locator(tileSelector);
+    await expect(tiles.first()).toBeAttached();
+    const sources = await tiles.evaluateAll(imgs => imgs.map(img => img.src));
+    expect(sources.length).toBeGreaterThan(0);
+    // CARTO now watermarks its keyless tiles with "API KEY REQUIRED".
+    expect(sources.some(src => src.includes('cartocdn.com'))).toBe(false);
+  });
+
+  test('basemap tiles load successfully', async ({ page }) => {
+    const tiles = page.locator(tileSelector);
+    await expect(tiles.first()).toBeAttached();
+    // A tile that 404s or is blocked decodes to a zero-width image.
+    await expect.poll(async () =>
+      tiles.evaluateAll(imgs =>
+        imgs.filter(img => img.complete && img.naturalWidth > 0).length
+      )
+    ).toBeGreaterThan(0);
+  });
+
   test('clicking a feature marker opens a popup with a table', async ({ page }) => {
     const markers = page.locator('.leaflet-marker-icon');
     const count = await markers.count();
